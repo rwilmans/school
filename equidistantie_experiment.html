@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Experiment — Twee personen, gelijke afstand</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#0b1120;--panel:#141e32;--panel2:#1b2942;--stroke:#34435a;--text:#e9f1fb;--muted:#a5b4cb;--accent:#7bd5ef;--good:#8de2bd;--warn:#ffd28d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 25% 10%,#1b3050 0,transparent 50%),var(--bg);color:var(--text)}.shell{max-width:1550px;margin:auto;padding:26px 24px 40px}.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}h1{font-weight:740;letter-spacing:-.04em;font-size:clamp(23px,3vw,36px);margin:0 0 6px}.sub{color:var(--muted);margin:0;font-size:14px;line-height:1.55}.tag{background:#203650;border:1px solid #3d6d89;border-radius:20px;color:#b4e8f5;padding:7px 12px;font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:20px;align-items:start}.stage{background:var(--panel);border:1px solid var(--stroke);border-radius:18px;overflow:hidden;box-shadow:0 16px 42px #0003}.stagebar{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--stroke);gap:12px;flex-wrap:wrap}.stagebar strong{font-size:13px}.small{color:var(--muted);font-size:12px}.room{padding:12px}.room canvas{display:block;width:100%;height:auto;aspect-ratio:1.55;background:#091222;border:2px solid #61788e;border-radius:9px;cursor:crosshair}.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--stroke);border-top:1px solid var(--stroke)}.stat{background:var(--panel);padding:14px 16px}.stat label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.stat b{font-variant-numeric:tabular-nums;font-size:22px;font-weight:650}.status{font-size:13px;color:var(--accent);display:flex;align-items:center;gap:8px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor}.actions{display:flex;gap:9px;padding:14px 16px;flex-wrap:wrap;border-top:1px solid var(--stroke)}button{cursor:pointer;border-radius:10px;border:1px solid #405a74;background:#263a55;color:var(--text);padding:10px 15px;font-size:13px;font-weight:650;transition:background .15s}button:hover{background:#34516f}button.primary{background:#167996;border-color:#259eba}button.primary:hover{background:#208eaa}button:disabled{opacity:.45;cursor:not-allowed}.settings{background:var(--panel);border:1px solid var(--stroke);border-radius:18px;padding:20px;max-height:calc(100vh - 36px);overflow-y:auto}.settings h2{margin:0 0 15px;font-size:17px}.group{border-top:1px solid var(--stroke);padding-top:18px;margin-top:18px}.group h3{margin:0 0 13px;font-size:13px;color:#cbd9e9}.field{margin:12px 0}.rowlabel{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;color:#d5e1ef}.value{color:var(--accent);font-variant-numeric:tabular-nums}.field input[type=range]{width:100%;accent-color:#64c8e5}select,input[type=number]{background:var(--panel2);color:var(--text);border:1px solid var(--stroke);border-radius:8px;padding:9px;width:100%;font:inherit;font-size:13px}input[type=checkbox]{accent-color:#58c7e9;width:16px;height:16px}.checkrow{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.4}.hint{font-size:11px;color:var(--muted);line-height:1.55;margin:6px 0 0}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}.note{background:#13243a;border:1px solid #2f4d66;border-radius:10px;padding:11px 12px;margin-top:14px;color:#c3d4e7;font-size:12px;line-height:1.6}.warning{color:var(--warn)}.foot{max-width:1100px;margin-top:18px;font-size:12px;line-height:1.65;color:var(--muted)}.legend{display:flex;gap:16px;flex-wrap:wrap;margin:0 16px 13px;color:var(--muted);font-size:11px}.swatch{display:inline-block;width:10px;height:10px;border-radius:50%;background:#8ddaf1;margin-right:6px}.swatch.orange{background:#ffd28d}.swatch.purple{background:#bca5ff}.metricline{padding:0 16px 12px;color:var(--muted);font-size:12px;line-height:1.6}.metricline b{color:var(--text)}@media(max-width:1050px){.layout{grid-template-columns:1fr}.settings{max-height:none}.statgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:540px){.shell{padding:12px}.stat{padding:10px}.stat b{font-size:18px}.room{padding:7px}}
+
+/* Compact sidebar and contextual explanations */
+.layout{grid-template-columns:minmax(290px,330px) minmax(0,1fr);gap:16px}
+.settings{grid-column:1;grid-row:1;padding:16px;max-height:none;overflow:visible}
+.stage{grid-column:2;grid-row:1;min-width:0}
+.settings h2{margin:0 0 10px;font-size:16px}
+.group{padding-top:11px;margin-top:12px}
+.group h3{margin:0 0 7px;font-size:12px;display:flex;align-items:center;gap:6px}
+.field{margin:8px 0}.rowlabel{margin-bottom:4px;font-size:12px}
+.field input[type=range]{display:block;height:18px;margin:0}
+select,input[type=number]{padding:6px 7px;font-size:12px}
+.checkrow{align-items:center;font-size:12px;margin-top:10px}
+.twocol{gap:7px}
+.settings .hint,.settings .note:not(#feedback){display:none}
+#feedback{margin-top:12px;padding:8px 10px;font-size:11px;line-height:1.4}
+.info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;min-width:17px;padding:0;border:1px solid #557a9b;border-radius:50%;background:#20364f;color:#a9dff2;font-size:11px;font-family:Georgia,serif;font-style:italic;font-weight:700;line-height:1;vertical-align:middle;cursor:help;flex-shrink:0}
+.info:hover,.info:focus-visible{background:#267495;color:white;outline:2px solid #78d7f1;outline-offset:1px}
+.info .tip{pointer-events:none;opacity:0;visibility:hidden;position:absolute;left:calc(100% + 8px);top:-9px;width:260px;max-width:min(260px,calc(100vw - 65px));z-index:200;padding:10px 12px;background:#263d56;border:1px solid #6593b4;box-shadow:0 8px 24px #0009;border-radius:9px;color:#f0f7ff;text-align:left;font-family:Inter,ui-sans-serif,sans-serif;font-size:12px;font-weight:400;font-style:normal;line-height:1.45;white-space:normal;transition:opacity .12s}
+.info:hover .tip,.info:focus-visible .tip{opacity:1;visibility:visible}
+@media(max-width:1150px){.layout{grid-template-columns:minmax(250px,300px) minmax(0,1fr)}.statgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:770px){.layout{grid-template-columns:1fr}.settings{grid-column:1;grid-row:1}.stage{grid-column:1;grid-row:2}.settings .tip{left:20px;top:calc(100% + 6px)}}
+
+/* Compactere werkruimte zodat de bediening direct onder de kamer zichtbaar blijft. */
+.shell{padding-top:13px;padding-bottom:18px}.heading{margin-bottom:11px}.heading h1{font-size:clamp(21px,2.4vw,28px)}
+.room{padding:8px}.room canvas{aspect-ratio:900/580;max-height:min(53vh,480px);height:auto;object-fit:contain;margin:auto;width:auto;max-width:100%}
+.stagebar{padding:9px 13px}.stat{padding:8px 12px}.stat b{font-size:18px}.actions{padding:9px 12px;gap:7px}
+.actions button{padding:8px 10px}.metricline{padding:0 12px 7px}.legend{margin-bottom:8px}
+@media(max-width:770px){.room canvas{max-height:52vh}}
+
+.science{margin-top:16px;background:var(--panel);border:1px solid var(--stroke);border-radius:16px;padding:16px}
+.science[hidden]{display:none}.science h2{margin:0 0 8px;font-size:19px}
+.science p{font-size:12px;color:var(--muted);line-height:1.5;margin:5px 0 12px}
+.science-controls{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.science-controls label{display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px}
+.science-controls input{width:110px}
+.science-controls select{width:145px}
+.science-controls button{white-space:nowrap}
+.science-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+.science-stat{padding:12px;background:#1d2d46;border:1px solid #3c526b;border-radius:10px}
+.science-stat small{display:block;color:var(--muted);font-size:11px;line-height:1.4}
+.science-stat strong{display:block;font-size:19px;margin-top:5px;font-variant-numeric:tabular-nums}
+#scienceChart{width:100%;height:195px;display:block;border:1px solid #32435c;border-radius:8px;background:#0a1425}
+.science-table{overflow-x:auto;margin-top:12px;max-height:245px;overflow-y:auto}
+.science-table table{width:100%;border-collapse:collapse;font-size:12px;text-align:right}
+.science-table th,.science-table td{padding:7px 9px;border-bottom:1px solid #34435a;white-space:nowrap}
+.science-table th{position:sticky;top:0;background:#20324c;text-align:right}
+.science-table th:first-child,.science-table td:first-child{text-align:left}
+.science-progress{width:100%;height:9px;accent-color:#7bd5ef;margin:10px 0 3px}
+.science-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.science-divider{height:1px;background:var(--stroke);margin:24px 0 20px}
+.sweep{margin:16px 0 20px;padding:15px;border:1px solid #3c526b;border-radius:13px;background:#14253b}
+.sweep h3{font-size:16px;margin:0 0 6px}.sweep h4{font-size:13px;margin:0 0 8px}
+.sweep-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.sweep-charts canvas{display:block;width:100%;height:auto;background:#0a1425;border:1px solid #32435c;border-radius:8px}
+@media(max-width:800px){.sweep-charts{grid-template-columns:1fr}}
+@media(max-width:850px){.science-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* v15: tabs for workspace, persistent left settings, shared research settings */
+.workspace{min-width:0}
+.mode-tabs{display:flex;gap:7px;margin:0 0 12px;padding:5px;background:#14253a;border:1px solid var(--stroke);border-radius:13px}
+.mode-tab{flex:1;text-align:center;background:transparent;border-color:transparent;padding:12px 10px;color:#aec3d9;font-size:13px}
+.mode-tab:hover{background:#253d59}
+.mode-tab.active{background:#216c89;color:#fff;border-color:#3b9dbd;box-shadow:0 2px 8px #0003}
+.mode-tab:focus-visible{outline:3px solid #88d9ed;outline-offset:2px}
+#visualTab[hidden],#sciencePanel[hidden]{display:none!important}
+.workspace>.science{margin-top:0}
+.research-shared{border:1px solid #3b6980;border-radius:13px;background:#112c3f;padding:14px 16px;margin:15px 0 18px}
+.research-shared h3{font-size:15px;margin:0 0 13px}
+.shared-tag{font-size:11px;color:#89d6e9;font-weight:500;white-space:nowrap;margin-left:6px}
+.research-shared p{margin:9px 0 0}
+.research-block{margin-top:10px}
+.research-block h3{font-size:16px;margin:0 0 9px}
+.research-block h3 .small{font-weight:400}
+.science-heading h2{margin-bottom:6px}
+@media(max-width:770px){.settings{max-height:none}.workspace{grid-column:1;grid-row:2}}
+@media(max-width:480px){.mode-tab{padding:10px 7px;font-size:12px}.shared-tag{display:block;margin:5px 0 0}}
+/* v16: regressie en afnemende groepsgrootte */
+.regression-panel{margin-top:19px;border:1px solid #48617a;background:#101e32;border-radius:12px;padding:14px}
+.regression-panel h4{font-size:15px;margin:0 0 9px}
+.regression-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0}
+.regression-controls label{display:flex;align-items:center;gap:7px;color:#c9d8e8;font-size:12px}
+.regression-controls input[type=checkbox]{width:17px}
+.regression-controls input[type=number]{width:80px}
+.regression-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.regression-card{padding:12px;background:#1d2e47;border:1px solid #3e5772;border-radius:10px;font-size:12px;line-height:1.6}
+.regression-card strong{font-size:13px;color:#e7f3ff}
+.regression-card .formula{color:#91dfe9;font-family:ui-monospace,monospace;overflow-wrap:anywhere;margin:7px 0}
+.regression-note{color:var(--muted);font-size:11px;line-height:1.55}
+.regression-table{overflow-x:auto;max-height:245px;overflow-y:auto}
+.regression-table table{width:100%;border-collapse:collapse;font-size:12px}
+.regression-table th,.regression-table td{border-bottom:1px solid #33465d;padding:7px;text-align:right;white-space:nowrap}
+.regression-table th:first-child,.regression-table td:first-child{text-align:left}
+@media(max-width:720px){.regression-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main class="shell"><div class="heading"><div><h1>Wanneer komt de groep tot rust?</h1><p class="sub">Een interactieve simulatie van personen die even ver van twee gekozen anderen willen staan.</p></div><span class="tag">2D · dynamisch systeem</span></div><div class="layout"><aside class="settings"><h2>Instellingen</h2><div class="field"><div class="rowlabel"><label for="count">Aantal personen<button aria-label="Uitleg: Aantal deelnemers: van 3 tot 100. Bij wijziging ontstaat direct e" class="info" type="button">i<span class="tip" role="tooltip">Aantal deelnemers: van 3 tot 100. Bij wijziging ontstaat direct een nieuwe beginopstelling en begint de timer opnieuw.</span></button></label><b class="value" id="countVal">50</b></div><input id="count" max="100" min="3" step="1" type="range" value="50"/></div><div class="field"><div class="rowlabel"><label for="diameter">Diameter cirkels<button aria-label="Uitleg: Doorsnede van iedere persoon, in simulatiepixels. Grotere cirkels" class="info" type="button">i<span class="tip" role="tooltip">Doorsnede van iedere persoon, in simulatiepixels. Grotere cirkels nemen meer ruimte in en veroorzaken eerder botsingen.</span></button></label><b class="value" id="diameterVal">17 px</b></div><input id="diameter" max="42" min="6" step="1" type="range" value="17"/></div><label class="checkrow"><input checked="" id="collisions" type="checkbox"/><span>Personen kunnen niet door elkaar heen bewegen</span><button aria-label="Uitleg: AAN: cirkels proberen elkaar te ontwijken en overlap wordt gecorr" class="info" type="button">i<span class="tip" role="tooltip">AAN: personen anticiperen op elkaar, kunnen uitwijken en ruimte maken; resterende overlap wordt gecorrigeerd. UIT: ze mogen elkaar kruisen. De buitenmuren blijven altijd ondoordringbaar.</span></button></label><div class="field"><div class="rowlabel"><label for="cooperation">Ruimte voor elkaar maken <button class="info" type="button" aria-label="Uitleg samenwerking">i<span class="tip" role="tooltip">Bij 0% vermijden deelnemers nog steeds fysieke overlap, maar helpen ze anderen nauwelijks. Bij 100% wijken ze eerder uit, lopen ze om elkaar heen en maken ook stilstaande deelnemers ruimte. Dit is een vereenvoudigd gedragsmodel, geen exacte menselijke bewegingssimulatie.</span></button></label><b class="value" id="cooperationVal">70%</b></div><input id="cooperation" type="range" min="0" max="100" step="5" value="70"/></div><div class="field"><div class="rowlabel"><label for="spread">Verder van tweetal staan <button class="info" type="button" aria-label="Uitleg afstand langs middelloodlijn">i<span class="tip" role="tooltip">Gewenste extra afstand vanaf het midden van het tweetal, LANGS de middelloodlijn. Van de twee mogelijke posities (+ en −) wordt dynamisch de dichtstbijzijnde gekozen. Dit is een bewegingsvoorkeur, geen voorwaarde voor het beëindigen van het experiment: de oorspronkelijke regel blijft gelijke afstand tot de twee gekozen personen. Als een voorkeurspositie buiten de muren ligt, gebruikt het model het dichtstbijzijnde bereikbare punt op de middelloodlijn. Andere personen kunnen de beweging tijdelijk hinderen.</span></button></label><b class="value" id="spreadVal">80 px</b></div><input id="spread" min="0" max="250" step="5" type="range" value="80"/></div><div class="group"><h3>Wat telt als gelijke afstand?<button aria-label="Uitleg: De middelloodlijn van het geselecteerde tweetal is de verzameling" class="info" type="button">i<span class="tip" role="tooltip">De middelloodlijn van het geselecteerde tweetal is de verzameling punten die precies even ver van beide personen liggen. De marge wordt loodrecht op die lijn gemeten.</span></button></h3><div class="twocol"><div class="field"><label class="rowlabel" for="tolerance">Toegestane afwijking<button aria-label="Uitleg: Breedte van de toegestane afwijking aan weerszijden van de middel" class="info" type="button">i<span class="tip" role="tooltip">Breedte van de toegestane afwijking aan weerszijden van de middelloodlijn, in pixels of als percentage van de afstand tussen het gekozen tweetal.</span></button></label><input id="tolerance" max="100" min="0" step="0.5" type="number" value="16"/></div><div class="field"><label class="rowlabel" for="unit">Eenheid<button aria-label="Uitleg: Kies pixels of procent van de afstand tussen de twee geselecteerd" class="info" type="button">i<span class="tip" role="tooltip">Kies pixels of procent van de afstand tussen de twee geselecteerde personen. De procentuele marge verandert mee als die afstand verandert.</span></button></label><select id="unit"><option value="percent">% van tweetalafstand</option><option value="pixels">Pixels</option></select></div></div></div><div class="group"><h3>Hoe kiest een persoon zijn tweetal?<button aria-label="Uitleg: Iedere persoon kiest twee andere personen. De keuze blijft tijden" class="info" type="button">i<span class="tip" role="tooltip">Iedere persoon kiest twee andere personen. De keuze blijft tijdens deze ronde vast, maar wordt onmiddellijk opnieuw gemaakt wanneer je de selectieregel aanpast.</span></button></h3><div class="field"><label class="rowlabel" for="selection">Selectieregel<button aria-label="Uitleg: Willekeurig: overal in de kamer. Dichtstbijzijnde: altijd de twee" class="info" type="button">i<span class="tip" role="tooltip">Willekeurig: overal in de kamer. Dichtstbijzijnde: altijd de twee naaste personen. Straal/richting: willekeurig uit de kandidaten in die zone. Bij minder dan twee kandidaten wordt aangevuld.</span></button></label><select id="selection"><option value="random">Willekeurig uit alle personen</option><option value="nearest">De twee dichtstbijzijnde</option><option value="radius">Willekeurig binnen een straal</option><option value="sector">Willekeurig binnen een richting</option><option value="radiusSector" selected> Binnen straal én richting</option></select></div><div class="field" hidden="" id="radiusField"><div class="rowlabel"><label for="radius">Zoekstraal<button aria-label="Uitleg: Alleen personen binnen deze afstand kunnen gekozen worden, tenzij" class="info" type="button">i<span class="tip" role="tooltip">Alleen personen binnen deze afstand kunnen gekozen worden, tenzij onvoldoende kandidaten aanwezig zijn.</span></button></label><b class="value" id="radiusVal">300 px</b></div><input id="radius" max="900" min="40" step="10" type="range" value="300"/></div><div hidden="" id="sectorFields"><div class="field"><label class="rowlabel" for="directionMode">Kijkrichting bepalen<button class="info" type="button" aria-label="Uitleg kijkrichting">i<span class="tip" role="tooltip">Menigte (standaard): iedere persoon kijkt naar de concentratie van mensen binnen de zoekstraal. Eigen groep: naar het actuele middelpunt van het eigen begincluster (bij willekeurige verdeling valt dit terug op menigte). Handmatig: iedereen krijgt dezelfde richting. Bij een muur kijkt men bij voorkeur de kamer in. De gekozen tweetallen blijven tijdens een ronde vast; kijkrichtingen kunnen blijven meedraaien.</span></button></label><select id="directionMode"><option value="crowd" selected>Richting meeste mensen (per persoon)</option><option value="cluster">Richting middelpunt eigen groep</option><option value="manual">Handmatig (iedereen gelijk)</option></select></div><div id="manualDirectionField" hidden><div class="field"><div class="rowlabel"><label for="angle">Kijkrichting (0° = omhoog)<button aria-label="Uitleg: 0 graden wijst omhoog" class="info" type="button">i<span class="tip" role="tooltip">0° wijst omhoog, 90° rechts, 180° omlaag en 270° links. In handmatige modus geldt deze richting voor iedereen.</span></button></label><b class="value" id="angleVal">0°</b></div><input id="angle" max="359" min="0" step="1" type="range" value="0"/></div></div><div class="field"><div class="rowlabel"><label for="aperture">Openingshoek<button aria-label="Uitleg: De totale openingshoek rond de opgegeven kijkrichting." class="info" type="button">i<span class="tip" role="tooltip">De totale openingshoek rond de opgegeven kijkrichting.</span></button></label><b class="value" id="apertureVal">180°</b></div><input id="aperture" max="360" min="15" step="5" type="range" value="180"/></div></div></div><div class="group"><h3>Beginopstelling<button aria-label="Uitleg: De beginposities zijn willekeurig over de gehele ruimte of rond e" class="info" type="button">i<span class="tip" role="tooltip">De beginposities zijn willekeurig over de gehele ruimte of rond een aantal groepscentra verdeeld. Een wijziging maakt een nieuwe opstelling.</span></button></h3><div class="field"><label class="rowlabel" for="distribution">Verdeling<button aria-label="Uitleg: Willekeurig spreidt deelnemers door de kamer; clusters verzamelen" class="info" type="button">i<span class="tip" role="tooltip">Willekeurig spreidt deelnemers door de kamer; clusters verzamelen deelnemers rondom meerdere groepscentra.</span></button></label><select id="distribution"><option value="random">Volledig willekeurig</option><option value="cluster">In groepjes / clusters</option></select></div><div class="field" hidden="" id="clusterField"><div class="rowlabel"><label for="clusters">Aantal clusters<button aria-label="Uitleg: Aantal groepscentra bij een geclusterde verdeling. Veranderen maa" class="info" type="button">i<span class="tip" role="tooltip">Aantal groepscentra bij een geclusterde verdeling. Veranderen maakt een nieuwe opstelling.</span></button></label><b class="value" id="clustersVal">4</b></div><input id="clusters" max="8" min="2" type="range" value="4"/></div></div><div class="group"><h3>Beweging &amp; rustcriterium<button aria-label="Uitleg: Personen bewegen richting hun eigen middelloodlijn, botsen eventu" class="info" type="button">i<span class="tip" role="tooltip">Personen bewegen richting hun eigen middelloodlijn, botsen eventueel met andere cirkels en een evenwicht wanneer iedereen voldoet aan het rustcriterium; langdurige fysieke blokkade wordt afzonderlijk gemeld.</span></button></h3><div class="field"><div class="rowlabel"><label for="maxSpeed">Maximale loopsnelheid<button aria-label="Uitleg: Bovengrens voor de bewegingssnelheid, uitgedrukt in simulatiepixe" class="info" type="button">i<span class="tip" role="tooltip">Bovengrens voor de bewegingssnelheid, uitgedrukt in simulatiepixels per seconde.</span></button></label><b class="value" id="maxSpeedVal">90 px/s</b></div><input id="maxSpeed" max="220" min="15" step="5" type="range" value="90"/></div><div class="field"><div class="rowlabel"><label for="restSpeed">Snelheid geldt als stilstand onder<button aria-label="Uitleg: Onder deze snelheid geldt één deelnemer als nagenoeg stilstaand. Een hoge drempel laat het experiment eerder stoppen, ook als personen nog zichtbaar bewegen. " class="info" type="button">i<span class="tip" role="tooltip">Onder deze snelheid geldt één deelnemer als nagenoeg stilstaand. Een hoge drempel laat het experiment eerder stoppen, ook als personen nog zichtbaar bewegen. Een volledig evenwicht vereist dat iedereen ook aan de afstandsmarges voldoet, gedurende twee seconden. Als alle beweging vrijwel stopt maar personen nog buiten de marge staan, wordt dit apart als vastgelopen gemeld.</span></button></label><b class="value" id="restSpeedVal">12 px/s</b></div><input id="restSpeed" max="60" min="0" step="0.5" type="range" value="12"/></div><div class="field"><div class="rowlabel"><label for="maxTime">Maximale simulatieduur<button aria-label="Uitleg: Maximale simulatieduur. Bij het bereiken hiervan stopt het experi" class="info" type="button">i<span class="tip" role="tooltip">Maximale simulatieduur. Bij het bereiken hiervan stopt het experiment, ook als de groep nog niet tot rust is gekomen.</span></button></label><b class="value" id="maxTimeVal">120 s</b></div><input id="maxTime" max="600" min="10" step="10" type="range" value="120"/></div></div><div class="note" id="feedback">Instellingen werken direct door. Bij aantal personen of beginopstelling start een nieuwe ronde.</div></aside><div class="workspace">
+<nav class="mode-tabs" role="tablist" aria-label="Experimentmodus">
+ <button id="tabVisual" class="mode-tab active" type="button" role="tab" aria-selected="true" aria-controls="visualTab">◉ Visueel experiment</button>
+ <button id="tabScience" class="mode-tab" type="button" role="tab" aria-selected="false" aria-controls="sciencePanel">▤ Wetenschappelijk onderzoek</button>
+</nav>
+<div id="visualTab" role="tabpanel" aria-labelledby="tabVisual">
+<section class="stage"><div class="stagebar"><strong>Experimenteerruimte <span class="small">· 900 × 580 simulatiepixels</span></strong><div class="status" id="status"><span class="dot"></span><span id="statusText">Klaar voor start</span></div></div><div class="room"><canvas aria-label="Animatie van bewegende personen in rechthoekige kamer" height="580" id="canvas" width="900"></canvas></div><div class="legend"><span><i class="swatch"></i>Persoon</span><span><i class="swatch orange"></i>Geselecteerde persoon</span><span><i class="swatch purple"></i>Gekozen tweetal</span><span>Klik een persoon om zijn twee keuzes en middelloodlijn te zien</span></div><div class="statgrid"><div class="stat"><label>Verstreken tijd</label><b id="clock">00:00.0</b></div><div class="stat"><label>Personen binnen afstandsmarge</label><b id="satisfied">—</b></div><div class="stat"><label>Gemiddelde snelheid</label><b id="speed">—</b></div><div class="stat"><label>Langste afwijking</label><b id="error">—</b></div></div><div class="metricline" id="details">Metingen verschijnen zodra je het experiment start.</div><div class="actions"><button class="primary" id="start">▶ Start experiment</button><button disabled="" id="pause">⏸ Pauze</button><button id="reset">↻ Opnieuw (nieuwe opstelling)</button><button id="same">Zelfde opstelling</button></div></section><p class="foot">Model v15: elke persoon beweegt haaks naar de middelloodlijn van een <em>vast gekozen tweetal</em> (kijkrichting wordt per persoon bepaald) en remt af bij het bereiken van de toegestane margestrook. Zonder botsingen blijven personen binnen de muren; met botsingen wordt overlap ook geometrisch gecorrigeerd. Dit is een geïdealiseerde simulatie, geen exacte voorspelling van menselijk gedrag. Simulatietijd en werkelijke looptijd kunnen onder zware belasting uiteenlopen.</p></div>
+<section class="science" id="sciencePanel" role="tabpanel" aria-labelledby="tabScience" hidden aria-label="Wetenschappelijke analyse">
+ <div class="science-heading"><h2>Wetenschappelijk onderzoek</h2><p>Gebruik de modelinstellingen links voor beide onderzoeken. Bij de start maakt het systeem een momentopname van die instellingen.</p></div>
+ <div class="research-shared" aria-label="Gemeenschappelijke onderzoeksinstellingen">
+  <h3>Gemeenschappelijke onderzoeksinstellingen <span class="shared-tag">Gelden voor beide onderzoeken</span></h3>
+  <div class="science-controls">
+   <label>Parallelle workers <select id="sciWorkers"><option value="1">1 worker</option><option value="2">2 workers</option><option value="3">3 workers</option><option value="4" selected>4 workers</option><option value="6">6 workers</option><option value="8">8 workers</option></select></label>
+   <label>Basis-seed <input id="sciSeed" type="number" min="0" max="4294967295" step="1" value="20261111"></label>
+  </div>
+  <p>Het aantal workers bepaalt de maximale paralleliteit van <strong>zowel herhaalde simulaties als parameteronderzoek</strong>. Vrije workers pakken automatisch de volgende taak op via de dynamische wachtrij. De seed maakt de experimenten reproduceerbaar.</p>
+ </div>
+ <div class="research-block"><h3>1. Herhaalde simulaties <span class="small">· dezelfde groepsgrootte</span></h3>
+ <p>Elke herhaling gebruikt een nieuwe willekeurige opstelling en vaste keuzes gedurende de ronde. Tijden zijn <strong>simulatietijden</strong>. Vastgelopen en niet-afgeronde runs zijn uitgesloten van de evenwichtstijdstatistiek.</p>
+ <div class="science-controls">
+  <label>Aantal herhalingen <input id="sciRuns" type="number" min="1" max="1000" step="1" value="100"></label>
+
+  <button class="primary" id="sciStart" type="button">▶ Analyse starten</button>
+  <button id="sciStop" type="button" disabled>■ Stop analyse</button>
+  <button id="sciExport" type="button" disabled>↓ Exporteer CSV</button>
+ </div>
+ <progress class="science-progress" id="sciProgress" max="100" value="0"></progress>
+ <div class="small" id="sciStatus" role="status">Nog geen analyse uitgevoerd.</div>
+ <div class="science-grid">
+  <div class="science-stat"><small>Geslaagd evenwicht / totaal</small><strong id="sciSuccess">—</strong></div>
+  <div class="science-stat"><small>Mediaan tijd tot evenwicht</small><strong id="sciMedian">—</strong></div>
+  <div class="science-stat"><small>Gemiddelde tijd tot evenwicht</small><strong id="sciMean">—</strong></div>
+  <div class="science-stat"><small>25e–75e percentiel evenwichtstijd</small><strong id="sciIqr">—</strong></div>
+  <div class="science-stat"><small>Vastgelopen</small><strong id="sciStalled">—</strong></div>
+  <div class="science-stat"><small>Tijdslimiet</small><strong id="sciLimited">—</strong></div>
+  <div class="science-stat"><small>90e percentiel evenwichtstijd</small><strong id="sciP90">—</strong></div>
+  <div class="science-stat"><small>Gemiddeld percentage personen binnen marge bij einde</small><strong id="sciSatisfaction">—</strong></div>
+ </div>
+ <div class="small" style="margin:10px 0 7px">Verdeling van tijden tot <strong>geslaagd</strong> evenwicht (alleen afgeronde succesvolle runs)</div>
+ <canvas id="scienceChart" width="1000" height="195" role="img" aria-label="Histogram van tijden voor geslaagde evenwichten"></canvas>
+ <p>Interpretatie: gemiddelde, mediaan en percentielen zijn <strong>conditioneel op geslaagd evenwicht</strong>. Ze vertegenwoordigen dus niet alle herhalingen. Een hoge uitval of tijdslimiet kan het gemiddelde vertekenen.</p>
+ <div class="science-table"><table><thead><tr><th>Run</th><th>Seed</th><th>Uitkomst</th><th>Tijd (s)</th><th>Binnen marge</th><th>Max. afwijking (px)</th><th>Selectie-aanvullingen</th></tr></thead><tbody id="sciRows"><tr><td colspan="7">Nog geen resultaten.</td></tr></tbody></table></div>
+ </div>
+ <div class="science-divider" role="separator"></div>
+ <div class="sweep" id="sweepPanel">
+  <h3>2. Parameteronderzoek <span class="small">· vergelijk groepsgroottes</span></h3>
+  <p>Verschillende aantallen personen met verder dezelfde instellingen. Per groepsgrootte nieuwe, reproduceerbare beginopstellingen. Dezelfde seed per herhaling maakt onderlinge vergelijkingen beter controleerbaar. Een dynamische wachtrij verdeelt de runs automatisch over beschikbare workers. Niet-geslaagde runs tellen niet mee in de mediane evenwichtstijd.</p>
+  <div class="science-controls">
+   <label>Vanaf personen <input id="sweepFrom" type="number" min="3" max="100" step="1" value="5"></label>
+   <label>Tot personen <input id="sweepTo" type="number" min="3" max="100" step="1" value="100"></label>
+   <label>Stapgrootte <input id="sweepStep" type="number" min="1" max="97" step="1" value="5"></label>
+   <label>Herhalingen per waarde <input id="sweepReps" type="number" min="1" max="1000" step="1" value="100"></label>
+   <button id="sweepStart" class="primary" type="button">▶ Parameteronderzoek starten</button>
+   <button id="sweepStop" type="button" disabled>■ Stop onderzoek</button>
+   <button id="sweepExport" type="button" disabled>↓ Exporteer onderzoeks-CSV</button>
+  </div>
+  <progress class="science-progress" id="sweepProgress" max="1" value="0"></progress>
+  <div class="small" id="sweepStatus" role="status">Nog geen parameteronderzoek uitgevoerd.</div>
+  <div class="sweep-charts">
+   <div><h4>Mediaan tijd tot evenwicht (s)</h4><canvas id="sweepMedianChart" width="760" height="280" aria-label="Mediane evenwichtstijd per groepsgrootte"></canvas><div class="small">Alleen geslaagde runs; geen punt als er geen geslaagde run is.</div></div>
+   <div><h4>Kans op geslaagd evenwicht (%)</h4><canvas id="sweepSuccessChart" width="760" height="280" aria-label="Percentage geslaagde evenwichten per groepsgrootte"></canvas><div class="small">Aantal geslaagde runs gedeeld door aantal voltooide runs per groepsgrootte.</div></div>
+  </div>
+  <div class="regression-panel" id="regressionPanel">
+   <h4>3. Regressieanalyse · verbanden en afnemende groepsgrootte</h4>
+   <p>De doorgetrokken punten zijn waarnemingen. De gestreepte lijnen tonen de geschatte verbanden; modellen worden automatisch op de werkelijke, afgeronde run-aantallen gefit.</p>
+   <div class="regression-controls">
+    <label><input type="checkbox" id="sweepDescending"> Groepsgrootte van groot naar klein tonen</label>
+    <label>Gewenste slaagkans (%) <input type="number" id="sweepTarget" min="1" max="99" step="1" value="80"></label>
+   </div>
+   <div class="regression-cards">
+    <div class="regression-card" id="regTime">Na meerdere gemeten groepsgroottes verschijnt hier de regressie van de tijd.</div>
+    <div class="regression-card" id="regChance">Na meerdere gemeten groepsgroottes verschijnt hier de regressie van de slaagkans.</div>
+   </div>
+   <div class="regression-note" id="regGuidance">Een aflopende groepsgrootte toont de omgekeerd gelezen relatie bij onafhankelijke herstarts, niet wat er gebeurt als deelnemers tijdens één lopend experiment vertrekken.</div>
+   <div class="regression-table"><table><thead><tr><th>Personen ↓</th><th>Waargenomen succes</th><th>Voorspeld succes</th><th>Waargenomen mediaan</th><th>Voorspelde mediaan</th><th>Runs</th></tr></thead><tbody id="regRows"><tr><td colspan="6">Nog geen onderzoeksgegevens.</td></tr></tbody></table></div>
+   <p class="regression-note">De logistieke fit gebruikt aantallen successen/mislukkingen; de tijdsfit gebruikt alleen de medianen van geslaagde runs. De modelselectie is exploratief en geen bewijs voor een natuurwet. Voorspellingen worden uitsluitend binnen het onderzochte bereik getoond. Tijdslimieten en vastlopers vormen afzonderlijke einduitkomsten.</p>
+  </div>
+  <div class="science-table"><table><thead><tr><th>Personen</th><th>Gereed</th><th>Evenwicht</th><th>Vastgelopen</th><th>Tijdslimiet</th><th>Succes %</th><th>Mediaan (s)</th><th>Gemiddelde (s)</th><th>P25–P75 (s)</th></tr></thead><tbody id="sweepRows"><tr><td colspan="9">Nog geen gegevens.</td></tr></tbody></table></div>
+  <p>Let op: bij zeer lage succespercentages is de mediaan gebaseerd op weinig succesvolle runs en daardoor minder representatief. Dit is een modelsimulatie, geen empirische meting van menselijk gedrag.</p>
+ </div>
+
+</section></div></div></main>
+<script id="scientificWorker" type="text/plain">
+"use strict";
+const W=900,H=580;
+let agents=[],config=null,fallbackCount=0,initialOverlap=false;
+function rng(s){let x=s>>>0;return()=>{x=(x+0x6D2B79F5)>>>0;let t=x;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}
+function shuffledTwo(list,r){let a=Math.floor(r()*list.length);let i=list.splice(a,1)[0],j=list[Math.floor(r()*list.length)];return [i,j];}
+function clamp(x,min,max){return Math.max(min,Math.min(max,x));}
+function place(c,r){const a=[],rad=c.diameter/2+1;const centers=Array.from({length:c.clusters},(_,i)=>{let th=2*Math.PI*i/c.clusters+.5;return {x:W/2+Math.cos(th)*W*.29,y:H/2+Math.sin(th)*H*.25};});let failures=0;
+for(let i=0;i<c.count;i++){let accepted=null,best=null,bestGap=-Infinity;for(let trial=0;trial<500;trial++){let x,y;if(c.distribution==='cluster'){const mid=centers[i%c.clusters];x=clamp(mid.x+(r()+r()+r()-1.5)*130,rad,W-rad);y=clamp(mid.y+(r()+r()+r()-1.5)*100,rad,H-rad);}else{x=rad+r()*(W-2*rad);y=rad+r()*(H-2*rad);}let gap=a.length?Math.min(...a.map(q=>Math.hypot(x-q.x,y-q.y)))-c.diameter:1000;if(gap>bestGap){best={x,y};bestGap=gap;}if(!c.collisions||gap>=1){accepted={x,y};break;}}if(!accepted){accepted=best;failures++;}a.push({...accepted,vx:0,vy:0,targets:[],clusterId:c.distribution==='cluster'?i%c.clusters:-1,heading:0,err:0,allowed:0});}
+initialOverlap=failures>0;return a;}
+// Canvas gebruikt +x naar rechts en +y naar beneden. 0° is boven, 90° rechts.
+function compassToRadians(degrees){return (degrees-90)*Math.PI/180;}
+function normalAngle(x){return Math.atan2(Math.sin(x),Math.cos(x));}
+function preferredHeading(i,c){
+ const p=agents[i];
+ if(c.directionMode==='manual')return compassToRadians(c.angle);
+ const radius=c.radius, useCluster=c.directionMode==='cluster'&&c.distribution==='cluster'&&p.clusterId>=0;
+ let vx=0,vy=0,count=0;
+ for(let j=0;j<agents.length;j++){
+   if(i===j)continue;
+   const q=agents[j],dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
+   if(d<1e-5)continue;
+   if(useCluster){if(q.clusterId!==p.clusterId)continue;}
+   else if(d>radius)continue;
+   // Eenheidsvectoren wegen de omringende mensen per persoon, niet per afstand.
+   vx+=dx/d;vy+=dy/d;count++;
+ }
+ if(count===0||Math.hypot(vx,vy)<0.15){
+   // Bij lege zoekruimte of symmetrische menigte naar het kamerinterieur kijken.
+   vx=W/2-p.x;vy=H/2-p.y;
+ }
+ // Een richting buiten de kamer vermijden; de keuzezone blijft zo bruikbaar bij muren.
+ const buffer=Math.min(85,Math.max(35,radius*.16));
+ if(p.x<buffer)vx+=((buffer-p.x)/buffer)*2;
+ if(p.x>W-buffer)vx-=((p.x-(W-buffer))/buffer)*2;
+ if(p.y<buffer)vy+=((buffer-p.y)/buffer)*2;
+ if(p.y>H-buffer)vy-=((p.y-(H-buffer))/buffer)*2;
+ return Math.atan2(vy,vx);
+}
+function updateHeadings(c,immediate=false){
+ if(c.directionMode==='manual'){
+   for(const p of agents)p.heading=compassToRadians(c.angle);
+   return;
+ }
+ for(let i=0;i<agents.length;i++){
+   const target=preferredHeading(i,c),p=agents[i];
+   // Geleidelijk meedraaien voorkomt abrupte veranderingen in de kijksector.
+   p.heading=immediate?target:p.heading+normalAngle(target-p.heading)*0.18;
+ }
+}
+function chooseTargets(c,r){fallbackCount=0;const rad=c.radius,half=c.aperture*Math.PI/360;updateHeadings(c,true);for(let i=0;i<agents.length;i++){let a=agents[i];let all=agents.map((p,j)=>({j,d:Math.hypot(p.x-a.x,p.y-a.y),dx:p.x-a.x,dy:p.y-a.y})).filter(o=>o.j!==i).sort((x,y)=>x.d-y.d);let candidates=all;if(c.selection==='radius'||c.selection==='radiusSector')candidates=candidates.filter(o=>o.d<=rad);
+if(c.selection==='sector'||c.selection==='radiusSector')candidates=candidates.filter(o=>Math.cos(Math.atan2(o.dy,o.dx)-a.heading)>=Math.cos(half)-1e-10);
+let result;if(c.selection==='nearest'){result=all.slice(0,2).map(x=>x.j);}else{let pool=candidates.map(x=>x.j);if(pool.length<2){fallbackCount++;for(const o of all){if(!pool.includes(o.j))pool.push(o.j);if(pool.length>=2)break;}}result=shuffledTwo(pool,r);}a.targets=result;const aa=agents[result[0]],bb=agents[result[1]];const tx=-(bb.y-aa.y),ty=bb.x-aa.x;const tangential=(a.x-(aa.x+bb.x)/2)*tx+(a.y-(aa.y+bb.y)/2)*ty;a.spreadSide=Math.abs(tangential)>1e-4?Math.sign(tangential):((i%2)?1:-1);}}
+function errInfo(i){const p=agents[i],a=agents[p.targets[0]],b=agents[p.targets[1]];if(!a||!b)return {signed:0,allowed:0,ux:1,uy:0};const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);if(d<.001)return {signed:0,allowed:config.unit==='pixels'?config.tolerance:0,ux:1,uy:0};const ux=dx/d,uy=dy/d,signed=(p.x-(a.x+b.x)/2)*ux+(p.y-(a.y+b.y)/2)*uy;return {signed,allowed:config.unit==='pixels'?config.tolerance:cappedTolerance(d),ux,uy};}
+function cappedTolerance(pairDistance){return config.tolerance/100*pairDistance;}
+// Het bereikbare deel van de middelloodlijn: M + s*t, inclusief muurafstand (cirkelstraal).
+function reachableBisector(a,b,diameter){
+ const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+ const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+ const tx=d>1e-9?-dy/d:0,ty=d>1e-9?dx/d:1;
+ const r=diameter/2;
+ let lo=-Infinity,hi=Infinity;
+ for(const [m,t,min,max] of [[mx,tx,r,W-r],[my,ty,r,H-r]]){
+   if(Math.abs(t)<1e-9){if(m<min-1e-6||m>max+1e-6)return {mx,my,tx,ty,lo:0,hi:0};continue;}
+   const u=(min-m)/t,v=(max-m)/t;
+   lo=Math.max(lo,Math.min(u,v));hi=Math.min(hi,Math.max(u,v));
+ }
+ if(lo>hi){lo=hi=0;}
+ return {mx,my,tx,ty,lo,hi};
+}
+// Kies het dichtstbijzijnde BEREIKBARE voorkeursdoel, zonder te wisselen door afrondingsruis.
+function wallAwareSpread(p,segment,spread){
+ const {mx,my,tx,ty,lo,hi}=segment;
+ const along=(p.x-mx)*tx+(p.y-my)*ty;
+ const plus=clamp(spread,lo,hi),minus=clamp(-spread,lo,hi);
+ const dPlus=Math.abs(plus-along),dMinus=Math.abs(minus-along);
+ let side=p.spreadSide||1;
+ if(dPlus+0.6<dMinus)side=1;
+ else if(dMinus+0.6<dPlus)side=-1;
+ p.spreadSide=side;
+ const target=side>0?plus:minus;
+ // Een positie op >spread van het midden is ook goed; nooit terug naar 80px trekken.
+ const alreadyFar=side*along>=spread-0.5;
+ return {along,target,deficit:alreadyFar?0:target-along,lo,hi};
+}
+
+
+function simulatedStep(dt){
+ const c=config,n=agents.length,r=c.diameter/2;
+ updateHeadings(c);
+ // De enige plaatsvoorwaarde is gelijke afstand tot het gekozen tweetal:
+ // normaal op de middelloodlijn corrigeren, nooit naar het middenpunt aantrekken.
+ // Anticipeer ook op de translatie/rotatie van de middelloodlijn zelf.
+ const preferred=agents.map((p,i)=>{
+   const g=errInfo(i), a=agents[p.targets[0]],b=agents[p.targets[1]];
+   const dx=b.x-a.x,dy=b.y-a.y,d=Math.max(.001,Math.hypot(dx,dy));
+   const mvx=(a.vx+b.vx)*.5,mvy=(a.vy+b.vy)*.5;
+   const rvx=b.vx-a.vx,rvy=b.vy-a.vy;
+   const rotation=(-g.uy*rvx+g.ux*rvy)/d;
+   const px=p.x-(a.x+b.x)*.5,py=p.y-(a.y+b.y)*.5;
+   // d(signed)/dt = (v - v_mid)·u + (p-mid)·du/dt.
+   const lineNormalSpeed=mvx*g.ux+mvy*g.uy-rotation*(-g.uy*px+g.ux*py);
+   const excess=Math.max(0,Math.abs(g.signed)-g.allowed);
+   const correction=-Math.sign(g.signed)*Math.min(c.maxSpeed,excess*3.2);
+   // De middelloodlijn volgen is alleen nodig als zij richting de persoon beweegt
+   // of wanneer de persoon buiten de tolerantiestrook staat.
+   const tracking=excess>0.01 ? lineNormalSpeed :
+     (Math.abs(g.signed)>g.allowed*.6 ? lineNormalSpeed*.65 : 0);
+   const v=clamp(correction+tracking,-c.maxSpeed,c.maxSpeed);
+   // De kortste route naar de middelloodlijn is het uitgangspunt, MAAR de lijn
+   // is slechts bereikbaar tussen zijn snijpunten met de binnenkant van de muren.
+   const segment=reachableBisector(a,b,c.diameter);
+   const along=px*segment.tx+py*segment.ty;
+   const nearestReachable=clamp(along,segment.lo,segment.hi);
+   let tangentSpeed=0;
+   // Staat de projectie van de persoon buiten het bereikbare lijnstuk, dan moet
+   // hij langs het lijnstuk naar het dichtstbijzijnde eindpunt kunnen bewegen.
+   // Anders zou een normale correctie tegen de muur blijven aanduwen.
+   const endpointDelta=nearestReachable-along;
+   if(excess>0.01 && Math.abs(endpointDelta)>.25){
+     tangentSpeed=clamp(endpointDelta*2.8,-c.maxSpeed*.8,c.maxSpeed*.8);
+   }
+   if(c.spread>0){
+     const pref=wallAwareSpread(p,segment,c.spread);
+     // Spreiding is ondergeschikt aan gelijke afstand en mag niet richting
+     // een positie buiten de muren blijven duwen.
+     const priority=excess>0.01?0.22:1;
+     const extra=clamp(pref.deficit*2.2,-c.maxSpeed*.75,c.maxSpeed*.75)*priority;
+     if(Math.abs(endpointDelta)<=.25 || excess<=.01)tangentSpeed+=extra;
+   }
+   tangentSpeed=clamp(tangentSpeed,-c.maxSpeed,c.maxSpeed);
+   return {vx:g.ux*v+segment.tx*tangentSpeed,vy:g.uy*v+segment.ty*tangentSpeed};
+ });
+ const desired=preferred.map(v=>({...v}));
+ if(c.collisions){
+   // Alleen obstakels op een daadwerkelijke/voorspelde botsingskoers beïnvloeden
+   // de looprichting. Een persoon die gewoon dichtbij staat wordt niet afgestoten.
+   const horizon=.36+ c.cooperation*.50;
+   const clearance=c.diameter+1.5+c.cooperation*3;
+   const maxAvoid=13+57*c.cooperation;
+   for(let pass=0;pass<2;pass++){
+     for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+       const a=agents[i],b=agents[j];
+       let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+       if(d<1e-5){const t=(i*73+j*31)*2.399;dx=Math.cos(t)*.001;dy=Math.sin(t)*.001;d=.001;}
+       // Gebruik huidig voorgesteld gedrag, zodat ontwijkacties de tweede ronde beïnvloeden.
+       const rvx=desired[j].vx-desired[i].vx,rvy=desired[j].vy-desired[i].vy;
+       const closing=-(dx*rvx+dy*rvy)/d;
+       const tNear=clamp(-(dx*rvx+dy*rvy)/(rvx*rvx+rvy*rvy+1e-8),0,horizon);
+       const fx=dx+rvx*tNear,fy=dy+rvy*tNear,predicted=Math.hypot(fx,fy);
+       const overlap=d<c.diameter+.25;
+       if(!overlap && (closing<=.05 || predicted>=clearance || tNear<=1e-5))continue;
+       // Normale correctie voor het oplossen van overlap en dreigende insluiting.
+       const nx=dx/d,ny=dy/d;
+       const urgency=overlap ? Math.min(maxAvoid,(c.diameter-d+1)*9) :
+         Math.min(maxAvoid,(clearance-predicted)*Math.max(3,1.1/(tNear+.13)));
+       const potentialI=Math.hypot(preferred[i].vx,preferred[i].vy),
+             potentialJ=Math.hypot(preferred[j].vx,preferred[j].vy);
+       // Coöperatief: ook een stilstaande persoon draagt een deel van de uitwijking.
+       // Bij nul samenwerking krijgt de lopende persoon het grootste aandeel.
+       const baseI=potentialI/(potentialI+potentialJ+.001),
+             shareI=(1-c.cooperation*.75)*baseI+c.cooperation*.75*.5;
+       const shareJ=1-shareI;
+       desired[i].vx-=nx*urgency*shareI;desired[i].vy-=ny*urgency*shareI;
+       desired[j].vx+=nx*urgency*shareJ;desired[j].vy+=ny*urgency*shareJ;
+       // Bij een verwachte botsing: een vaste passeerzijde (niet willekeurig
+       // per frame), zodat twee personen elkaar niet steeds terug blokkeren.
+       if(c.cooperation>0 && closing>0.5){
+         const side=((i*17+j*31)%2)?1:-1;
+         const lateral=Math.min(maxAvoid, Math.max(0,clearance-predicted)*
+           (2.8+3.2*c.cooperation));
+         // Tegenovergestelde tangentiële routes: daadwerkelijk om elkaar heen.
+         desired[i].vx+=-ny*side*lateral*shareI;
+         desired[i].vy+= nx*side*lateral*shareI;
+         desired[j].vx+= ny*side*lateral*shareJ;
+         desired[j].vy+=-nx*side*lateral*shareJ;
+       }
+     }
+   }
+ }
+ // Snelle heroriëntatie op de middelloodlijn zodra de botsingsdreiging voorbij is.
+ // Geen springende posities: versnelling wordt nog steeds geleidelijk gefilterd.
+ for(let i=0;i<n;i++){
+   const a=agents[i],v=desired[i],t=clamp(dt*11,0,1);
+   a.vx+=(v.vx-a.vx)*t;a.vy+=(v.vy-a.vy)*t;
+   const sp=Math.hypot(a.vx,a.vy);
+   if(sp>c.maxSpeed){a.vx*=c.maxSpeed/sp;a.vy*=c.maxSpeed/sp;}
+   a.x+=a.vx*dt;a.y+=a.vy*dt;
+   if(a.x<r){a.x=r;a.vx=Math.max(0,a.vx);}else if(a.x>W-r){a.x=W-r;a.vx=Math.min(0,a.vx);}
+   if(a.y<r){a.y=r;a.vy=Math.max(0,a.vy);}else if(a.y>H-r){a.y=H-r;a.vy=Math.min(0,a.vy);}
+ }
+ // Positiecorrectie is uitsluitend een veiligheidsvangnet bij werkelijke overlap.
+ if(c.collisions){for(let iter=0;iter<5;iter++){
+   for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+     const a=agents[i],b=agents[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+     if(d>=c.diameter)continue;
+     if(d<1e-6){const t=(i*73+j*31)*2.399;dx=Math.cos(t);dy=Math.sin(t);d=1;}
+     const ux=dx/d,uy=dy/d,overlap=c.diameter-d+.002;
+     const ax=clamp(a.x-ux*overlap*.5,r,W-r),ay=clamp(a.y-uy*overlap*.5,r,H-r);
+     const bx=clamp(b.x+ux*overlap*.5,r,W-r),by=clamp(b.y+uy*overlap*.5,r,H-r);
+     const am=Math.hypot(ax-a.x,ay-a.y),bm=Math.hypot(bx-b.x,by-b.y);
+     a.x=ax;a.y=ay;b.x=bx;b.y=by;
+     const remaining=Math.max(0,overlap-am-bm);
+     if(remaining>0){
+       a.x=clamp(a.x-ux*remaining*.5,r,W-r);a.y=clamp(a.y-uy*remaining*.5,r,H-r);
+       b.x=clamp(b.x+ux*remaining*.5,r,W-r);b.y=clamp(b.y+uy*remaining*.5,r,H-r);
+     }
+     const rel=(b.vx-a.vx)*ux+(b.vy-a.vy)*uy;
+     if(rel<0){a.vx+=rel*.5*ux;a.vy+=rel*.5*uy;b.vx-=rel*.5*ux;b.vy-=rel*.5*uy;}
+   }
+ }}
+}
+
+function metrics(){
+ let ok=0,moving=0,maxSpeed=0,maxExcess=0,errors=[];
+ for(let i=0;i<agents.length;i++){
+  const g=errInfo(i),a=agents[i];
+  const excess=Math.max(0,Math.abs(g.signed)-g.allowed);
+  const speed=Math.hypot(a.vx,a.vy);
+  if(excess<=.45)ok++;
+  if(speed>config.restSpeed)moving++;
+  maxSpeed=Math.max(maxSpeed,speed);
+  maxExcess=Math.max(maxExcess,excess);
+  errors.push(excess);
+ }
+ return {ok,moving,maxSpeed,maxExcess,all:ok===agents.length&&moving===0};
+}
+function runOne(c,seed){
+ config=c;
+ const random=rng(seed);
+ agents=place(c,random);
+ chooseTargets(c,random);
+ const additions=fallbackCount, overlap=initialOverlap;
+ let t=0,rest=0,stall=0,steps=0;
+ const dt=1/60;
+ let stats=metrics();
+ while(t+1e-8<c.maxTime){
+  // Match the normal simulation's substeps (roughly 60 Hz); simulate time, not wall-clock.
+  const step=Math.min(dt,c.maxTime-t);
+  simulatedStep(step);
+  t+=step;steps++;
+  stats=metrics();
+  rest=stats.all ? Math.min(2,rest+step):0;
+  stall=!stats.all&&stats.maxSpeed<=.75 ? Math.min(3,stall+step):0;
+  if(rest>=2-1e-8||stall>=3-1e-8)break;
+ }
+ const outcome=rest>=2-1e-8?'evenwicht':stall>=3-1e-8?'vastgelopen':'tijdslimiet';
+ return {seed,outcome,time:+t.toFixed(3),satisfied:stats.ok,participantCount:agents.length,
+    maxExcess:+stats.maxExcess.toFixed(3),maxSpeed:+stats.maxSpeed.toFixed(3),
+    fallbacks:additions,initialOverlap:overlap,steps};
+}
+// Each worker processes one job at a time. The main thread distributes the next
+// queued job as soon as this worker has finished its previous one.
+onmessage=({data})=>{
+ if(data.type!=='job')return;
+ const job=data.job;
+ try{postMessage({type:'result',index:job.index,result:runOne(job.config||data.config,job.seed)});}
+ catch(error){postMessage({type:'error',index:job.index,message:String(error?.stack||error)});}
+};
+
+</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const cv=$('canvas'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+const ids=['count','cooperation','diameter','radius','angle','aperture','clusters','spread','maxSpeed','restSpeed','maxTime'];
+const units={count:'',cooperation:'%',diameter:' px',radius:' px',angle:'°',aperture:'°',clusters:'',spread:' px',maxSpeed:' px/s',restSpeed:' px/s',maxTime:' s'};
+for(const id of ids){$(id).addEventListener('input',()=>{$(id+'Val').textContent=$(id).value+units[id];});}
+function updateVis(){const s=$('selection').value;$('radiusField').hidden=!['radius','radiusSector'].includes(s);$('sectorFields').hidden=!['sector','radiusSector'].includes(s);$('clusterField').hidden=$('distribution').value!=='cluster';$('manualDirectionField').hidden=$('directionMode').value!=='manual';}
+$('selection').addEventListener('change',updateVis);$('distribution').addEventListener('change',updateVis);$('directionMode').addEventListener('change',updateVis);updateVis();
+function options(){return {count:+$('count').value,diameter:+$('diameter').value,collisions:$('collisions').checked,cooperation:+$('cooperation').value/100,tolerance:Math.max(0,+$('tolerance').value||0),unit:$('unit').value,selection:$('selection').value,directionMode:$('directionMode').value,radius:+$('radius').value,angle:+$('angle').value,aperture:+$('aperture').value,distribution:$('distribution').value,clusters:+$('clusters').value,spread:+$('spread').value,maxSpeed:+$('maxSpeed').value,restSpeed:+$('restSpeed').value,maxTime:+$('maxTime').value};}
+let agents=[],config=null,runState='idle',time=0,restTime=0,stallTime=0,selected=-1,seed=0,lastSeed=0,lastFrame=0,raf=0,fallbackCount=0,initialOverlap=false,endingReason='';
+const rndSeed=()=>Math.floor(Math.random()*4294967295);
+function rng(s){let x=s>>>0;return()=>{x=(x+0x6D2B79F5)>>>0;let t=x;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}
+function shuffledTwo(list,r){let a=Math.floor(r()*list.length);let i=list.splice(a,1)[0],j=list[Math.floor(r()*list.length)];return [i,j];}
+function clamp(x,min,max){return Math.max(min,Math.min(max,x));}
+function place(c,r){const a=[],rad=c.diameter/2+1;const centers=Array.from({length:c.clusters},(_,i)=>{let th=2*Math.PI*i/c.clusters+.5;return {x:W/2+Math.cos(th)*W*.29,y:H/2+Math.sin(th)*H*.25};});let failures=0;
+for(let i=0;i<c.count;i++){let accepted=null,best=null,bestGap=-Infinity;for(let trial=0;trial<500;trial++){let x,y;if(c.distribution==='cluster'){const mid=centers[i%c.clusters];x=clamp(mid.x+(r()+r()+r()-1.5)*130,rad,W-rad);y=clamp(mid.y+(r()+r()+r()-1.5)*100,rad,H-rad);}else{x=rad+r()*(W-2*rad);y=rad+r()*(H-2*rad);}let gap=a.length?Math.min(...a.map(q=>Math.hypot(x-q.x,y-q.y)))-c.diameter:1000;if(gap>bestGap){best={x,y};bestGap=gap;}if(!c.collisions||gap>=1){accepted={x,y};break;}}if(!accepted){accepted=best;failures++;}a.push({...accepted,vx:0,vy:0,targets:[],clusterId:c.distribution==='cluster'?i%c.clusters:-1,heading:0,err:0,allowed:0});}
+initialOverlap=failures>0;return a;}
+// Canvas gebruikt +x naar rechts en +y naar beneden. 0° is boven, 90° rechts.
+function compassToRadians(degrees){return (degrees-90)*Math.PI/180;}
+function normalAngle(x){return Math.atan2(Math.sin(x),Math.cos(x));}
+function preferredHeading(i,c){
+ const p=agents[i];
+ if(c.directionMode==='manual')return compassToRadians(c.angle);
+ const radius=c.radius, useCluster=c.directionMode==='cluster'&&c.distribution==='cluster'&&p.clusterId>=0;
+ let vx=0,vy=0,count=0;
+ for(let j=0;j<agents.length;j++){
+   if(i===j)continue;
+   const q=agents[j],dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
+   if(d<1e-5)continue;
+   if(useCluster){if(q.clusterId!==p.clusterId)continue;}
+   else if(d>radius)continue;
+   // Eenheidsvectoren wegen de omringende mensen per persoon, niet per afstand.
+   vx+=dx/d;vy+=dy/d;count++;
+ }
+ if(count===0||Math.hypot(vx,vy)<0.15){
+   // Bij lege zoekruimte of symmetrische menigte naar het kamerinterieur kijken.
+   vx=W/2-p.x;vy=H/2-p.y;
+ }
+ // Een richting buiten de kamer vermijden; de keuzezone blijft zo bruikbaar bij muren.
+ const buffer=Math.min(85,Math.max(35,radius*.16));
+ if(p.x<buffer)vx+=((buffer-p.x)/buffer)*2;
+ if(p.x>W-buffer)vx-=((p.x-(W-buffer))/buffer)*2;
+ if(p.y<buffer)vy+=((buffer-p.y)/buffer)*2;
+ if(p.y>H-buffer)vy-=((p.y-(H-buffer))/buffer)*2;
+ return Math.atan2(vy,vx);
+}
+function updateHeadings(c,immediate=false){
+ if(c.directionMode==='manual'){
+   for(const p of agents)p.heading=compassToRadians(c.angle);
+   return;
+ }
+ for(let i=0;i<agents.length;i++){
+   const target=preferredHeading(i,c),p=agents[i];
+   // Geleidelijk meedraaien voorkomt abrupte veranderingen in de kijksector.
+   p.heading=immediate?target:p.heading+normalAngle(target-p.heading)*0.18;
+ }
+}
+function chooseTargets(c,r){fallbackCount=0;const rad=c.radius,half=c.aperture*Math.PI/360;updateHeadings(c,true);for(let i=0;i<agents.length;i++){let a=agents[i];let all=agents.map((p,j)=>({j,d:Math.hypot(p.x-a.x,p.y-a.y),dx:p.x-a.x,dy:p.y-a.y})).filter(o=>o.j!==i).sort((x,y)=>x.d-y.d);let candidates=all;if(c.selection==='radius'||c.selection==='radiusSector')candidates=candidates.filter(o=>o.d<=rad);
+if(c.selection==='sector'||c.selection==='radiusSector')candidates=candidates.filter(o=>Math.cos(Math.atan2(o.dy,o.dx)-a.heading)>=Math.cos(half)-1e-10);
+let result;if(c.selection==='nearest'){result=all.slice(0,2).map(x=>x.j);}else{let pool=candidates.map(x=>x.j);if(pool.length<2){fallbackCount++;for(const o of all){if(!pool.includes(o.j))pool.push(o.j);if(pool.length>=2)break;}}result=shuffledTwo(pool,r);}a.targets=result;const aa=agents[result[0]],bb=agents[result[1]];const tx=-(bb.y-aa.y),ty=bb.x-aa.x;const tangential=(a.x-(aa.x+bb.x)/2)*tx+(a.y-(aa.y+bb.y)/2)*ty;a.spreadSide=Math.abs(tangential)>1e-4?Math.sign(tangential):((i%2)?1:-1);}}
+function errInfo(i){const p=agents[i],a=agents[p.targets[0]],b=agents[p.targets[1]];if(!a||!b)return {signed:0,allowed:0,ux:1,uy:0};const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);if(d<.001)return {signed:0,allowed:config.unit==='pixels'?config.tolerance:0,ux:1,uy:0};const ux=dx/d,uy=dy/d,signed=(p.x-(a.x+b.x)/2)*ux+(p.y-(a.y+b.y)/2)*uy;return {signed,allowed:config.unit==='pixels'?config.tolerance:cappedTolerance(d),ux,uy};}
+function cappedTolerance(pairDistance){return config.tolerance/100*pairDistance;}
+// Het bereikbare deel van de middelloodlijn: M + s*t, inclusief muurafstand (cirkelstraal).
+function reachableBisector(a,b,diameter){
+ const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+ const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+ const tx=d>1e-9?-dy/d:0,ty=d>1e-9?dx/d:1;
+ const r=diameter/2;
+ let lo=-Infinity,hi=Infinity;
+ for(const [m,t,min,max] of [[mx,tx,r,W-r],[my,ty,r,H-r]]){
+   if(Math.abs(t)<1e-9){if(m<min-1e-6||m>max+1e-6)return {mx,my,tx,ty,lo:0,hi:0};continue;}
+   const u=(min-m)/t,v=(max-m)/t;
+   lo=Math.max(lo,Math.min(u,v));hi=Math.min(hi,Math.max(u,v));
+ }
+ if(lo>hi){lo=hi=0;}
+ return {mx,my,tx,ty,lo,hi};
+}
+// Kies het dichtstbijzijnde BEREIKBARE voorkeursdoel, zonder te wisselen door afrondingsruis.
+function wallAwareSpread(p,segment,spread){
+ const {mx,my,tx,ty,lo,hi}=segment;
+ const along=(p.x-mx)*tx+(p.y-my)*ty;
+ const plus=clamp(spread,lo,hi),minus=clamp(-spread,lo,hi);
+ const dPlus=Math.abs(plus-along),dMinus=Math.abs(minus-along);
+ let side=p.spreadSide||1;
+ if(dPlus+0.6<dMinus)side=1;
+ else if(dMinus+0.6<dPlus)side=-1;
+ p.spreadSide=side;
+ const target=side>0?plus:minus;
+ // Een positie op >spread van het midden is ook goed; nooit terug naar 80px trekken.
+ const alreadyFar=side*along>=spread-0.5;
+ return {along,target,deficit:alreadyFar?0:target-along,lo,hi};
+}
+
+function makeRun(useSame=false){cancelAnimationFrame(raf);config=options();seed=useSame&&lastSeed?lastSeed:rndSeed();lastSeed=seed;const r=rng(seed);agents=place(config,r);chooseTargets(config,r);time=0;restTime=0;stallTime=0;runState='ready';endingReason='';selected=0;$('clock').textContent='00:00.0';$('pause').disabled=true;$('pause').textContent='⏸ Pauze';$('start').disabled=false;$('start').textContent='▶ Start experiment';$('feedback').innerHTML='Opstelling aangemaakt. Seed: <b>'+seed+'</b>.'+(fallbackCount?' <span class="warning">Bij '+fallbackCount+' personen waren minder dan twee kandidaten binnen de selectiezone; de dichtstbijzijnde kandidaten zijn aangevuld.</span>':'')+(initialOverlap?' <span class="warning">De gekozen diameter en verdeling veroorzaakten enkele begin-overlappingen.</span>':'');computeStats();setStatus('Klaar voor start','var(--accent)');draw();}
+function setStatus(label,color){$('statusText').textContent=label;$('status').style.color=color;}
+function simulatedStep(dt){
+ const c=config,n=agents.length,r=c.diameter/2;
+ updateHeadings(c);
+ // De enige plaatsvoorwaarde is gelijke afstand tot het gekozen tweetal:
+ // normaal op de middelloodlijn corrigeren, nooit naar het middenpunt aantrekken.
+ // Anticipeer ook op de translatie/rotatie van de middelloodlijn zelf.
+ const preferred=agents.map((p,i)=>{
+   const g=errInfo(i), a=agents[p.targets[0]],b=agents[p.targets[1]];
+   const dx=b.x-a.x,dy=b.y-a.y,d=Math.max(.001,Math.hypot(dx,dy));
+   const mvx=(a.vx+b.vx)*.5,mvy=(a.vy+b.vy)*.5;
+   const rvx=b.vx-a.vx,rvy=b.vy-a.vy;
+   const rotation=(-g.uy*rvx+g.ux*rvy)/d;
+   const px=p.x-(a.x+b.x)*.5,py=p.y-(a.y+b.y)*.5;
+   // d(signed)/dt = (v - v_mid)·u + (p-mid)·du/dt.
+   const lineNormalSpeed=mvx*g.ux+mvy*g.uy-rotation*(-g.uy*px+g.ux*py);
+   const excess=Math.max(0,Math.abs(g.signed)-g.allowed);
+   const correction=-Math.sign(g.signed)*Math.min(c.maxSpeed,excess*3.2);
+   // De middelloodlijn volgen is alleen nodig als zij richting de persoon beweegt
+   // of wanneer de persoon buiten de tolerantiestrook staat.
+   const tracking=excess>0.01 ? lineNormalSpeed :
+     (Math.abs(g.signed)>g.allowed*.6 ? lineNormalSpeed*.65 : 0);
+   const v=clamp(correction+tracking,-c.maxSpeed,c.maxSpeed);
+   // De kortste route naar de middelloodlijn is het uitgangspunt, MAAR de lijn
+   // is slechts bereikbaar tussen zijn snijpunten met de binnenkant van de muren.
+   const segment=reachableBisector(a,b,c.diameter);
+   const along=px*segment.tx+py*segment.ty;
+   const nearestReachable=clamp(along,segment.lo,segment.hi);
+   let tangentSpeed=0;
+   // Staat de projectie van de persoon buiten het bereikbare lijnstuk, dan moet
+   // hij langs het lijnstuk naar het dichtstbijzijnde eindpunt kunnen bewegen.
+   // Anders zou een normale correctie tegen de muur blijven aanduwen.
+   const endpointDelta=nearestReachable-along;
+   if(excess>0.01 && Math.abs(endpointDelta)>.25){
+     tangentSpeed=clamp(endpointDelta*2.8,-c.maxSpeed*.8,c.maxSpeed*.8);
+   }
+   if(c.spread>0){
+     const pref=wallAwareSpread(p,segment,c.spread);
+     // Spreiding is ondergeschikt aan gelijke afstand en mag niet richting
+     // een positie buiten de muren blijven duwen.
+     const priority=excess>0.01?0.22:1;
+     const extra=clamp(pref.deficit*2.2,-c.maxSpeed*.75,c.maxSpeed*.75)*priority;
+     if(Math.abs(endpointDelta)<=.25 || excess<=.01)tangentSpeed+=extra;
+   }
+   tangentSpeed=clamp(tangentSpeed,-c.maxSpeed,c.maxSpeed);
+   return {vx:g.ux*v+segment.tx*tangentSpeed,vy:g.uy*v+segment.ty*tangentSpeed};
+ });
+ const desired=preferred.map(v=>({...v}));
+ if(c.collisions){
+   // Alleen obstakels op een daadwerkelijke/voorspelde botsingskoers beïnvloeden
+   // de looprichting. Een persoon die gewoon dichtbij staat wordt niet afgestoten.
+   const horizon=.36+ c.cooperation*.50;
+   const clearance=c.diameter+1.5+c.cooperation*3;
+   const maxAvoid=13+57*c.cooperation;
+   for(let pass=0;pass<2;pass++){
+     for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+       const a=agents[i],b=agents[j];
+       let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+       if(d<1e-5){const t=(i*73+j*31)*2.399;dx=Math.cos(t)*.001;dy=Math.sin(t)*.001;d=.001;}
+       // Gebruik huidig voorgesteld gedrag, zodat ontwijkacties de tweede ronde beïnvloeden.
+       const rvx=desired[j].vx-desired[i].vx,rvy=desired[j].vy-desired[i].vy;
+       const closing=-(dx*rvx+dy*rvy)/d;
+       const tNear=clamp(-(dx*rvx+dy*rvy)/(rvx*rvx+rvy*rvy+1e-8),0,horizon);
+       const fx=dx+rvx*tNear,fy=dy+rvy*tNear,predicted=Math.hypot(fx,fy);
+       const overlap=d<c.diameter+.25;
+       if(!overlap && (closing<=.05 || predicted>=clearance || tNear<=1e-5))continue;
+       // Normale correctie voor het oplossen van overlap en dreigende insluiting.
+       const nx=dx/d,ny=dy/d;
+       const urgency=overlap ? Math.min(maxAvoid,(c.diameter-d+1)*9) :
+         Math.min(maxAvoid,(clearance-predicted)*Math.max(3,1.1/(tNear+.13)));
+       const potentialI=Math.hypot(preferred[i].vx,preferred[i].vy),
+             potentialJ=Math.hypot(preferred[j].vx,preferred[j].vy);
+       // Coöperatief: ook een stilstaande persoon draagt een deel van de uitwijking.
+       // Bij nul samenwerking krijgt de lopende persoon het grootste aandeel.
+       const baseI=potentialI/(potentialI+potentialJ+.001),
+             shareI=(1-c.cooperation*.75)*baseI+c.cooperation*.75*.5;
+       const shareJ=1-shareI;
+       desired[i].vx-=nx*urgency*shareI;desired[i].vy-=ny*urgency*shareI;
+       desired[j].vx+=nx*urgency*shareJ;desired[j].vy+=ny*urgency*shareJ;
+       // Bij een verwachte botsing: een vaste passeerzijde (niet willekeurig
+       // per frame), zodat twee personen elkaar niet steeds terug blokkeren.
+       if(c.cooperation>0 && closing>0.5){
+         const side=((i*17+j*31)%2)?1:-1;
+         const lateral=Math.min(maxAvoid, Math.max(0,clearance-predicted)*
+           (2.8+3.2*c.cooperation));
+         // Tegenovergestelde tangentiële routes: daadwerkelijk om elkaar heen.
+         desired[i].vx+=-ny*side*lateral*shareI;
+         desired[i].vy+= nx*side*lateral*shareI;
+         desired[j].vx+= ny*side*lateral*shareJ;
+         desired[j].vy+=-nx*side*lateral*shareJ;
+       }
+     }
+   }
+ }
+ // Snelle heroriëntatie op de middelloodlijn zodra de botsingsdreiging voorbij is.
+ // Geen springende posities: versnelling wordt nog steeds geleidelijk gefilterd.
+ for(let i=0;i<n;i++){
+   const a=agents[i],v=desired[i],t=clamp(dt*11,0,1);
+   a.vx+=(v.vx-a.vx)*t;a.vy+=(v.vy-a.vy)*t;
+   const sp=Math.hypot(a.vx,a.vy);
+   if(sp>c.maxSpeed){a.vx*=c.maxSpeed/sp;a.vy*=c.maxSpeed/sp;}
+   a.x+=a.vx*dt;a.y+=a.vy*dt;
+   if(a.x<r){a.x=r;a.vx=Math.max(0,a.vx);}else if(a.x>W-r){a.x=W-r;a.vx=Math.min(0,a.vx);}
+   if(a.y<r){a.y=r;a.vy=Math.max(0,a.vy);}else if(a.y>H-r){a.y=H-r;a.vy=Math.min(0,a.vy);}
+ }
+ // Positiecorrectie is uitsluitend een veiligheidsvangnet bij werkelijke overlap.
+ if(c.collisions){for(let iter=0;iter<5;iter++){
+   for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+     const a=agents[i],b=agents[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+     if(d>=c.diameter)continue;
+     if(d<1e-6){const t=(i*73+j*31)*2.399;dx=Math.cos(t);dy=Math.sin(t);d=1;}
+     const ux=dx/d,uy=dy/d,overlap=c.diameter-d+.002;
+     const ax=clamp(a.x-ux*overlap*.5,r,W-r),ay=clamp(a.y-uy*overlap*.5,r,H-r);
+     const bx=clamp(b.x+ux*overlap*.5,r,W-r),by=clamp(b.y+uy*overlap*.5,r,H-r);
+     const am=Math.hypot(ax-a.x,ay-a.y),bm=Math.hypot(bx-b.x,by-b.y);
+     a.x=ax;a.y=ay;b.x=bx;b.y=by;
+     const remaining=Math.max(0,overlap-am-bm);
+     if(remaining>0){
+       a.x=clamp(a.x-ux*remaining*.5,r,W-r);a.y=clamp(a.y-uy*remaining*.5,r,H-r);
+       b.x=clamp(b.x+ux*remaining*.5,r,W-r);b.y=clamp(b.y+uy*remaining*.5,r,H-r);
+     }
+     const rel=(b.vx-a.vx)*ux+(b.vy-a.vy)*uy;
+     if(rel<0){a.vx+=rel*.5*ux;a.vy+=rel*.5*uy;b.vx-=rel*.5*ux;b.vy-=rel*.5*uy;}
+   }
+ }}
+}
+function computeStats(){
+ if(!agents.length)return {all:false};
+ let ok=0,avg=0,maxErr=0,maxActualSpeed=0,moving=0,spreadPending=0;
+ for(let i=0;i<agents.length;i++){
+   const g=errInfo(i),a=agents[i];
+   a.err=Math.abs(g.signed);a.allowed=g.allowed;
+   const sp=Math.hypot(a.vx,a.vy);
+   avg+=sp;
+   maxActualSpeed=Math.max(maxActualSpeed,sp);
+   maxErr=Math.max(maxErr,Math.max(0,a.err-a.allowed));
+   // Alleen de wiskundige eis (gelijke afstand) bepaalt of iemand binnen marge staat.
+   // De extra spreiding langs de middelloodlijn is een voorkeur, GEEN rustcriterium.
+   if(a.err<=a.allowed+.45)ok++;
+   if(sp>config.restSpeed)moving++;
+   if(config.spread>0){
+     const aa=agents[a.targets[0]],bb=agents[a.targets[1]];
+     const seg=reachableBisector(aa,bb,config.diameter);
+     const pref=wallAwareSpread(a,seg,config.spread);
+     // Alleen een bereikbaar tekort telt mee; geen 'onvoldane voorkeur' bij een muur.
+     if(Math.abs(pref.deficit)>1.5)spreadPending++;
+   }
+ }
+ avg/=agents.length;
+ $('satisfied').textContent=ok+' / '+agents.length;
+ $('speed').textContent=avg.toFixed(1)+' px/s';
+ $('error').textContent=maxErr.toFixed(1)+' px';
+ $('details').innerHTML='<b>'+moving+'</b> personen boven rustdrempel · <b>'+spreadPending+'</b> nog niet op voorkeursafstand (geen rustvoorwaarde) · <b>'+fallbackCount+'</b> selectie-aanvullingen · <b>'+restTime.toFixed(1)+' / 2.0 s</b> stabiel · <b>'+stallTime.toFixed(1)+' / 3.0 s</b> fysiek vastgelopen · hoogste snelheid <b>'+maxActualSpeed.toFixed(2)+' px/s</b>';
+ return {all:ok===agents.length&&moving===0,avg,maxErr,ok,moving,maxActualSpeed};
+}
+function displayClock(){let m=Math.floor(time/60),s=time-m*60;$('clock').textContent=String(m).padStart(2,'0')+':'+s.toFixed(1).padStart(4,'0');}
+function finish(reason,stats){
+ runState='done';endingReason=reason;
+ $('pause').disabled=true;$('start').disabled=true;
+ if(reason==='rest'){
+   setStatus('Evenwicht bereikt','var(--good)');
+   $('feedback').innerHTML='Evenwicht bereikt na <b>'+time.toFixed(2)+' simulatieseconden</b>: alle <b>'+agents.length+'</b> personen voldeden minstens 2 seconden aan de afstands- en snelheidsvoorwaarden.';
+ }else if(reason==='stalled'){
+   setStatus('Vastgelopen — geen volledig evenwicht','var(--warn)');
+   $('feedback').innerHTML='Beweging vrijwel gestopt na <b>'+time.toFixed(2)+' simulatieseconden</b>, maar slechts <b>'+stats.ok+'/'+agents.length+'</b> personen voldoen aan de afstandseis. <b>Dit is geen geslaagde evenwichtstoestand.</b> Mogelijke oorzaak: blokkade door personen/muren of een lokaal minimum in het bewegingsmodel. Hoogste snelheid '+stats.maxActualSpeed.toFixed(2)+' px/s; grootste margeoverschrijding '+stats.maxErr.toFixed(2)+' px.';
+ }else{
+   setStatus('Tijdslimiet bereikt','var(--warn)');
+   $('feedback').innerHTML='Na <b>'+config.maxTime+' simulatieseconden</b> was nog geen evenwicht of langdurige vrijwel volledige stilstand vastgesteld. Op dit moment voldoen <b>'+stats.ok+'/'+agents.length+'</b> personen aan de afstandseis.';
+ }
+}
+function tick(ts){
+ if(runState!=='running')return;
+ let dt=clamp((ts-lastFrame)/1000,0,.05);lastFrame=ts;
+ const substeps=Math.max(1,Math.ceil(dt/.016));
+ for(let k=0;k<substeps;k++)simulatedStep(dt/substeps);
+ time+=dt;
+ const stats=computeStats();
+ restTime=stats.all?Math.min(2,restTime+dt):0;
+ // Detecteer afzonderlijk een fysiek vastgelopen opstelling, ook als de
+ // afstandseis nog niet bereikt is. De rustdrempel van de gebruiker (bv. 12
+ // px/s) is hiervoor te ruim: gebruik een strengere absolute grens van 0.75.
+ // Zo is langzaam doorlopen niet hetzelfde als daadwerkelijk vastlopen.
+ const nearlyFrozen=!stats.all && stats.maxActualSpeed<=0.75;
+ stallTime=nearlyFrozen?Math.min(3,stallTime+dt):0;
+ displayClock();
+ if(restTime>=2)finish('rest',stats);
+ else if(stallTime>=3)finish('stalled',stats);
+ else if(time>=config.maxTime)finish('limit',stats);
+ computeStats();draw();
+ if(runState==='running')raf=requestAnimationFrame(tick);
+}
+function start(){if(runState==='idle'||runState==='done')makeRun();if(runState==='ready'||runState==='paused'){runState='running';lastFrame=performance.now();$('pause').disabled=false;$('pause').textContent='⏸ Pauze';$('start').disabled=true;setStatus('In beweging','var(--accent)');raf=requestAnimationFrame(tick);}}
+$('start').addEventListener('click',start);$('pause').addEventListener('click',()=>{if(runState==='running'){runState='paused';cancelAnimationFrame(raf);$('pause').textContent='▶ Hervat';setStatus('Gepauzeerd','var(--warn)');}else if(runState==='paused'){runState='running';lastFrame=performance.now();$('pause').textContent='⏸ Pauze';setStatus('In beweging','var(--accent)');raf=requestAnimationFrame(tick);}});
+$('reset').addEventListener('click',()=>makeRun(false));$('same').addEventListener('click',()=>makeRun(true));
+cv.addEventListener('click',e=>{if(!agents.length)return;const box=cv.getBoundingClientRect(),x=(e.clientX-box.left)*W/box.width,y=(e.clientY-box.top)*H/box.height;let min=Infinity,idx=-1;agents.forEach((a,i)=>{const d=Math.hypot(x-a.x,y-a.y);if(d<min){idx=i;min=d;}});selected=min<Math.max(18,config.diameter)?idx:-1;draw();});
+function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle='#0a1425';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#ffffff08';ctx.lineWidth=1;for(let x=50;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(let y=50;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+if(selected>=0&&agents[selected]){const p=agents[selected],a=agents[p.targets[0]],b=agents[p.targets[1]],g=errInfo(selected);ctx.save();
+// Selectiegebied van deze persoon: straal en, indien ingesteld, kijksector.
+if(config.selection==='radius'||config.selection==='radiusSector'){
+ ctx.beginPath();ctx.arc(p.x,p.y,config.radius,0,2*Math.PI);
+ ctx.setLineDash([5,7]);ctx.lineWidth=1.5;ctx.strokeStyle='#ffe1a2bb';ctx.stroke();ctx.setLineDash([]);
+}
+// Nul-lijn van het kompas is verticaal omhoog (ook zichtbaar bij automatische kijkrichting).
+ ctx.setLineDash([3,8]);ctx.strokeStyle='#a4bfdc66';ctx.lineWidth=1;
+ ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y-Math.min(90,config.radius));ctx.stroke();ctx.setLineDash([]);
+ if(config.selection==='sector'||config.selection==='radiusSector'){
+ const theta=p.heading,half=config.aperture*Math.PI/360;
+ const reach=config.selection==='sector'?Math.max(W,H)*1.6:config.radius;
+ ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.arc(p.x,p.y,reach,theta-half,theta+half);ctx.closePath();
+ ctx.fillStyle='#ffe6a70d';ctx.fill();ctx.setLineDash([3,7]);ctx.lineWidth=1.2;ctx.strokeStyle='#eebf7980';ctx.stroke();ctx.setLineDash([]);
+}
+// Pijltje toont de richting waarin DEZE persoon kijkt.
+ ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.cos(p.heading)*40,p.y+Math.sin(p.heading)*40);
+ ctx.strokeStyle='#ffcf73';ctx.lineWidth=2.5;ctx.stroke();
+ ctx.strokeStyle='#a18af1';ctx.lineWidth=2;ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,nx=-g.uy,ny=g.ux;ctx.strokeStyle='#7be2d4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mx-nx*1500,my-ny*1500);ctx.lineTo(mx+nx*1500,my+ny*1500);ctx.stroke();ctx.strokeStyle='#7be2d440';ctx.lineWidth=Math.max(1,g.allowed*2);ctx.beginPath();ctx.moveTo(mx-nx*1500,my-ny*1500);ctx.lineTo(mx+nx*1500,my+ny*1500);ctx.stroke();ctx.setLineDash([]);
+if(config.spread>0){
+ const seg=reachableBisector(a,b,config.diameter),pref=wallAwareSpread(p,seg,config.spread);
+ const x=seg.mx+seg.tx*pref.target,y=seg.my+seg.ty*pref.target;
+ ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.strokeStyle='#ffcf73';ctx.lineWidth=2;ctx.stroke();
+}
+ctx.strokeStyle='#ffd28d99';ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(a.x,a.y);ctx.moveTo(p.x,p.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();}
+for(let i=0;i<agents.length;i++){let a=agents[i],isSelected=i===selected,isTarget=selected>=0&&agents[selected]?.targets.includes(i),satisfied=a.err<=a.allowed+.45;ctx.beginPath();ctx.arc(a.x,a.y,config.diameter/2,0,Math.PI*2);ctx.fillStyle=isSelected?'#f6c978':isTarget?'#bca5ff':satisfied?'#77dabb':'#75c5ea';ctx.fill();ctx.strokeStyle=isSelected?'#fff0b0':'#0a2534';ctx.lineWidth=isSelected?3:1.5;ctx.stroke();if(config.diameter>=14||isSelected){ctx.fillStyle='#07192c';ctx.font='bold '+Math.min(12,Math.max(9,config.diameter*.54))+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(i+1),a.x,a.y+.5);}}}
+// Settings apply immediately. Structural edits rebuild the room and restart the clock;
+// dynamic edits keep the current positions and elapsed time.
+function applySettings(changed){
+ const wasRunning=runState==='running';
+ if(['count','distribution','clusters'].includes(changed)){
+   makeRun(false);
+   if(wasRunning)start();
+   $('feedback').textContent='Nieuwe beginopstelling toegepast; de timer is opnieuw begonnen.';
+   return;
+ }
+ config=options();
+ if(['selection','directionMode','radius','angle','aperture'].includes(changed)){
+   // Re-select using a fresh deterministic stream, but leave every agent in place.
+   chooseTargets(config,rng(rndSeed()));
+   restTime=0;stallTime=0;
+   $('feedback').textContent='De gekozen tweetallen zijn direct opnieuw bepaald.'+(fallbackCount?' Bij '+fallbackCount+' personen is de selectie aangevuld.':'');
+ }else{
+   if(changed==='diameter'){
+     const r=config.diameter/2;
+     for(const a of agents){a.x=clamp(a.x,r,W-r);a.y=clamp(a.y,r,H-r);}
+   }
+   restTime=0;stallTime=0;
+   $('feedback').textContent='Instelling direct toegepast op de huidige opstelling.';
+ }
+ if(runState==='done'){
+   runState='ready';time=0;displayClock();
+   $('start').disabled=false;$('pause').disabled=true;
+   setStatus('Klaar voor start','var(--accent)');
+ }
+ computeStats();draw();
+}
+for(const id of [...ids,'collisions','tolerance','unit','selection','directionMode','distribution']){
+ const field=$(id);
+ field.addEventListener(field.type==='range'||field.type==='number'?'input':'change',()=>applySettings(id));
+}
+// Prepare an initial layout, but leave the clock stopped until Start.
+makeRun(false);
+</script>
+<script>
+(()=>{
+'use strict';
+const $s=id=>document.getElementById(id);
+let workers=[],items=[],running=false,runConfig=null,total=0,startWall=0,done=0,failures=0;
+const q=x=>Number.isFinite(x)?x.toFixed(1)+' s':'—';
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
+function quantile(sorted,p){if(!sorted.length)return NaN;const t=(sorted.length-1)*p,i=Math.floor(t),f=t-i;return sorted[i]+(sorted[Math.min(i+1,sorted.length-1)]-sorted[i])*f;}
+function drawHistogram(times){
+ const canvas=$s('scienceChart'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+ ctx.clearRect(0,0,W,H);ctx.fillStyle='#0a1425';ctx.fillRect(0,0,W,H);
+ ctx.font='13px system-ui';ctx.textBaseline='middle';
+ if(!times.length){ctx.fillStyle='#a5b4cb';ctx.fillText('Nog geen geslaagde evenwichten',25,90);return;}
+ const bins=Math.max(6,Math.min(24,Math.round(Math.sqrt(times.length))));
+ const low=Math.min(...times),high=Math.max(...times),span=Math.max(.01,high-low);
+ const hist=Array(bins).fill(0);for(const t of times)hist[Math.min(bins-1,Math.floor((t-low)/span*bins))]++;
+ const max=Math.max(...hist),plotX=58,plotW=W-88,top=20,bottom=H-35,plotH=bottom-top;
+ ctx.strokeStyle='#48617c';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(plotX,top);ctx.lineTo(plotX,bottom);ctx.lineTo(plotX+plotW,bottom);ctx.stroke();
+ for(let i=0;i<bins;i++){const bw=plotW/bins,x=plotX+i*bw,y=bottom-hist[i]/max*(plotH-8);
+ ctx.fillStyle='#65bbd7';ctx.fillRect(x+2,y,Math.max(1,bw-4),bottom-y);}
+ ctx.fillStyle='#bacade';ctx.textAlign='right';ctx.fillText(String(max),plotX-10,top+10);ctx.fillText('0',plotX-10,bottom);
+ ctx.textAlign='left';ctx.fillText(low.toFixed(1)+' s',plotX,bottom+18);
+ ctx.textAlign='right';ctx.fillText(high.toFixed(1)+' s',plotX+plotW,bottom+18);
+ const median=quantile([...times].sort((a,b)=>a-b),.5);
+ const x=plotX+(median-low)/span*plotW;
+ ctx.strokeStyle='#ffd28d';ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,bottom);ctx.stroke();ctx.setLineDash([]);
+ ctx.textAlign=x<plotX+plotW*.7?'left':'right';ctx.fillStyle='#ffd28d';ctx.fillText('mediaan '+median.toFixed(1)+' s',x+(x<plotX+plotW*.7?5:-5),top+9);
+}
+function refresh(){
+ const valid=items.filter(Boolean), successes=valid.filter(o=>o.outcome==='evenwicht');
+ const times=successes.map(o=>o.time).sort((a,b)=>a-b);
+ $s('sciSuccess').textContent=successes.length+' / '+total+' ('+(100*successes.length/Math.max(1,valid.length)).toFixed(1)+'% van gereed)';
+ $s('sciMean').textContent=q(avg(times));$s('sciMedian').textContent=q(quantile(times,.5));
+ $s('sciIqr').textContent=times.length?q(quantile(times,.25))+' – '+q(quantile(times,.75)):'—';
+ $s('sciP90').textContent=q(quantile(times,.9));
+ $s('sciStalled').textContent=String(valid.filter(o=>o.outcome==='vastgelopen').length);
+ $s('sciLimited').textContent=String(valid.filter(o=>o.outcome==='tijdslimiet').length);
+ $s('sciSatisfaction').textContent=valid.length?(100*avg(valid.map(o=>o.satisfied/o.participantCount))).toFixed(1)+'%':'—';
+ $s('sciProgress').max=total||1;$s('sciProgress').value=done;
+ $s('sciStatus').textContent=done+' / '+total+' herhalingen gereed'+(failures?' · '+failures+' fouten':'')+(running?' · berekening loopt…':'');
+ drawHistogram(times);
+ const tbody=$s('sciRows');tbody.replaceChildren();
+ const frag=document.createDocumentFragment();
+ valid.forEach((o,i)=>{const tr=document.createElement('tr');[items.indexOf(o)+1,o.seed,o.outcome,o.time.toFixed(2),o.satisfied+' / '+o.participantCount,o.maxExcess.toFixed(2),o.fallbacks].forEach(value=>{const td=document.createElement('td');td.textContent=value;tr.appendChild(td);});frag.appendChild(tr);});
+ tbody.appendChild(frag);
+ $s('sciExport').disabled=!valid.length;
+}
+function cleanup(){workers.forEach(w=>{w.terminate();URL.revokeObjectURL(w.workerUrl)});workers=[];}
+function finishRun(stopped=false){running=false;cleanup();$s('sciStart').disabled=false;$s('sciStop').disabled=true;refresh();
+ $s('sciStatus').textContent=(stopped?'Gestopt':'Analyse afgerond')+' · '+done+'/'+total+' uitgevoerd · '+((performance.now()-startWall)/1000).toFixed(1)+' s rekentijd'+(failures?' · '+failures+' fouten':'');
+}
+function stop(){if(!running)return;finishRun(true);}
+function start(){if(running)return;
+ total=Math.max(1,Math.min(1000,Math.round(+$s('sciRuns').value||100)));$s('sciRuns').value=total;
+ const count=Math.max(1,Math.min(total,+$s('sciWorkers').value||2));
+ const base=(Math.max(0,Math.floor(+$s('sciSeed').value||0))>>>0);
+ runConfig=options();items=Array(total).fill(null);done=0;failures=0;running=true;startWall=performance.now();
+ $s('sciStart').disabled=true;$s('sciStop').disabled=false;
+ refresh();
+ // Workers are blob-backed: the standalone HTML works without a server or separate files.
+ const source=$s('scientificWorker').textContent;
+ const jobs=Array.from({length:total},(_,index)=>({index,seed:(base+Math.imul(index,2654435761))>>>0}));
+ let nextJob=0;
+ const dispatch=w=>{
+  if(!running)return;
+  if(nextJob<jobs.length)w.postMessage({type:'job',config:runConfig,job:jobs[nextJob++]});
+  else if(done===total)finishRun();
+ };
+ try{
+  for(let wi=0;wi<count;wi++){
+   const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+   const w=new Worker(url);w.workerUrl=url;workers.push(w);
+   w.onmessage=({data})=>{
+    if(!running)return;
+    if(data.type==='result'){
+     if(!items[data.index]){items[data.index]=data.result;done++;refresh();}
+    }else if(data.type==='error'){
+     failures++;done++;$s('sciStatus').textContent='Fout in herhaling '+(data.index+1)+': '+data.message;
+    }
+    dispatch(w);
+   };
+   w.onerror=e=>{if(!running)return;finishRun(true);$s('sciStatus').textContent='Worker-fout: '+(e.message||'onbekend')+'. Controleer of de browser lokale blob-workers toestaat.';};
+  }
+  for(const w of workers)dispatch(w);
+ }catch(e){finishRun(true);$s('sciStatus').textContent='Parallel rekenen niet beschikbaar: '+e.message;}
+}
+function setExperimentTab(name){
+ const science=name==='science';
+ $s('visualTab').hidden=science;
+ $s('sciencePanel').hidden=!science;
+ $s('tabVisual').classList.toggle('active',!science);
+ $s('tabScience').classList.toggle('active',science);
+ $s('tabVisual').setAttribute('aria-selected',String(!science));
+ $s('tabScience').setAttribute('aria-selected',String(science));
+ if(science){refresh();}
+}
+$s('tabVisual').addEventListener('click',()=>setExperimentTab('visual'));
+$s('tabScience').addEventListener('click',()=>setExperimentTab('science'));
+$s('sciStart').addEventListener('click',start);
+$s('sciStop').addEventListener('click',stop);
+$s('sciExport').addEventListener('click',()=>{
+ const header=['run','seed','uitkomst','tijd_simulatieseconden','personen_binnen_marge','totaal_personen','maximale_margeoverschrijding_px','maximale_snelheid_px_s','selectie_aanvullingen','initiele_overlap','stappen','aantal_deelnemers','instellingen_json'];
+ const rows=items.map((o,i)=>{if(!o)return null;return [i+1,o.seed,o.outcome,o.time,o.satisfied,o.participantCount,o.maxExcess,o.maxSpeed,o.fallbacks,o.initialOverlap,o.steps,runConfig.count,JSON.stringify(runConfig)];}).filter(Boolean);
+ const esc=v=>'"'+String(v??'').replaceAll('"','""')+'"';
+ const csv='\uFEFF'+[header,...rows].map(row=>row.map(esc).join(';')).join('\r\n');
+ const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ const a=document.createElement('a');a.href=url;a.download='equidistantie_wetenschappelijk_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+});
+drawHistogram([]);
+})();
+</script>
+<script>
+(()=>{
+'use strict';
+const el=id=>document.getElementById(id);
+const format=v=>Number.isFinite(v)?v.toFixed(1):'—';
+const mean=ar=>ar.length?ar.reduce((a,b)=>a+b,0)/ar.length:NaN;
+const quant=(ar,p)=>{if(!ar.length)return NaN;const i=(ar.length-1)*p,j=Math.floor(i);return ar[j]+(ar[Math.min(j+1,ar.length-1)]-ar[j])*(i-j);};
+const workers=[];
+let currentRegression=null;
+let running=false,rows=[],results=[],started=0,finished=0,errors=0,baseConfig=null,total=0,baseSeed=0,stopped=false;
+function getSettings(){return {count:+el('count').value,diameter:+el('diameter').value,collisions:el('collisions').checked,cooperation:+el('cooperation').value/100,tolerance:Math.max(0,+el('tolerance').value||0),unit:el('unit').value,selection:el('selection').value,directionMode:el('directionMode').value,radius:+el('radius').value,angle:+el('angle').value,aperture:+el('aperture').value,distribution:el('distribution').value,clusters:+el('clusters').value,spread:+el('spread').value,maxSpeed:+el('maxSpeed').value,restSpeed:+el('restSpeed').value,maxTime:+el('maxTime').value};}
+function aggregate(){
+ return rows.map(n=>{
+  const all=results.filter(r=>r&&r.count===n),success=all.filter(r=>r.outcome==='evenwicht');
+  const ts=success.map(r=>r.time).sort((a,b)=>a-b);
+  return {n,done:all.length,success:success.length,stalled:all.filter(r=>r.outcome==='vastgelopen').length,limited:all.filter(r=>r.outcome==='tijdslimiet').length,rate:all.length?100*success.length/all.length:NaN,median:quant(ts,.5),average:mean(ts),p25:quant(ts,.25),p75:quant(ts,.75)};
+ });
+}
+// Gedeelde matrixoplosser voor kleinste kwadraten en binomiale IRLS.
+function solveMatrix(A,b){
+ const n=b.length,m=A.map((row,i)=>[...row,b[i]]);
+ for(let i=0;i<n;i++){
+  let pivot=i;for(let j=i+1;j<n;j++)if(Math.abs(m[j][i])>Math.abs(m[pivot][i]))pivot=j;
+  if(Math.abs(m[pivot][i])<1e-11)return null;
+  [m[i],m[pivot]]=[m[pivot],m[i]];
+  const z=m[i][i];for(let j=i;j<=n;j++)m[i][j]/=z;
+  for(let j=0;j<n;j++)if(j!==i){const f=m[j][i];for(let k=i;k<=n;k++)m[j][k]-=f*m[i][k];}
+ }
+ return m.map(r=>r[n]);
+}
+const sigmoid=z=>z>=0?1/(1+Math.exp(-z)):Math.exp(z)/(1+Math.exp(z));
+function fitChance(data,degree){
+ if(data.length<degree+2)return null;
+ const center=mean(data.map(d=>d.n)),scale=20;
+ const features=n=>{const x=(n-center)/scale;return degree===1?[1,x]:[1,x,x*x];};
+ const k=degree+1;let beta=Array(k).fill(0);const totalN=data.reduce((a,d)=>a+d.done,0);
+ const totalS=data.reduce((a,d)=>a+d.success,0);
+ beta[0]=Math.log((totalS+.5)/(totalN-totalS+.5));
+ for(let iter=0;iter<100;iter++){
+  let H=Array.from({length:k},()=>Array(k).fill(0)),gradient=Array(k).fill(0);
+  for(const d of data){const f=features(d.n),p=Math.min(.999999,Math.max(.000001,sigmoid(f.reduce((a,z,i)=>a+z*beta[i],0))));
+   const w=d.done*p*(1-p);
+   for(let i=0;i<k;i++){gradient[i]+=f[i]*(d.success-d.done*p);for(let j=0;j<k;j++)H[i][j]+=w*f[i]*f[j];}
+  }
+  // Zwakke ridge-regularisatie, ook voor volledige separatie.
+  for(let i=0;i<k;i++){H[i][i]+=1e-5;gradient[i]-=1e-5*beta[i];}
+  const delta=solveMatrix(H,gradient);if(!delta)return null;
+  const longest=Math.max(...delta.map(Math.abs));const mult=longest>2?2/longest:1;
+  beta=beta.map((z,i)=>z+delta[i]*mult);
+  if(longest*mult<1e-7)break;
+ }
+ const predict=n=>sigmoid(features(n).reduce((a,z,i)=>a+z*beta[i],0));
+ let loglike=0;for(const d of data){const p=Math.max(1e-10,Math.min(1-1e-10,predict(d.n)));loglike+=d.success*Math.log(p)+(d.done-d.success)*Math.log(1-p);}
+ // AICc gebruikt aantal onderscheiden groepsgroottes als conservatieve effectieve steekproefgrootte.
+ const aic=-2*loglike+2*k;
+ const aicc=data.length>k+1?aic+2*k*(k+1)/(data.length-k-1):Infinity;
+ return {name:degree===1?'Logistisch':'Logistisch gekromd',degree,predict,beta,center,scale,aicc};
+}
+function fitTime(data,kind){
+ const good=data.filter(d=>Number.isFinite(d.median)&&d.median>0&&d.success>0);
+ const k=kind==='quadratic'?3:2;if(good.length<k+2)return null;
+ const center=mean(good.map(d=>d.n)),scale=20;
+ const features=n=>{const x=(n-center)/scale;return kind==='quadratic'?[1,x,x*x]:kind==='log'?[1,Math.log(n)]:kind==='power'?[1,Math.log(n)]:[1,x];};
+ const Y=d=>kind==='power'?Math.log(d.median):d.median;
+ const A=Array.from({length:k},()=>Array(k).fill(0)),b=Array(k).fill(0);
+ // Elke groepsgrootte is een statistische eenheid. Geen kunstmatige weging met het aantal geslaagde runs.
+ for(const d of good){const f=features(d.n),y=Y(d);for(let i=0;i<k;i++){b[i]+=f[i]*y;for(let j=0;j<k;j++)A[i][j]+=f[i]*f[j];}}
+ const coef=solveMatrix(A,b);if(!coef)return null;
+ const predict=n=>{const z=features(n).reduce((a,x,i)=>a+x*coef[i],0);return kind==='power'?Math.exp(z):z;};
+ const rss=good.reduce((a,d)=>a+Math.pow(d.median-predict(d.n),2),0);
+ const tss=good.reduce((a,d)=>a+Math.pow(d.median-mean(good.map(e=>e.median)),2),0);
+ const rmse=Math.sqrt(rss/good.length),r2=tss?1-rss/tss:NaN;
+ const aicc=good.length>k+1?good.length*Math.log(Math.max(1e-10,rss/good.length))+2*k+2*k*(k+1)/(good.length-k-1):Infinity;
+ return {name:{linear:'Lineair',quadratic:'Kwadratisch',log:'Logaritmisch',power:'Machtswet'}[kind],kind,predict,coef,center,scale,rmse,r2,aicc};
+}
+function analyseRegression(a){
+ const chanceData=a.filter(d=>d.done>0);
+ const chanceModels=[fitChance(chanceData,1),fitChance(chanceData,2)].filter(Boolean).sort((a,b)=>a.aicc-b.aicc);
+ const timeModels=['linear','quadratic','log','power'].map(k=>fitTime(a,k)).filter(Boolean).sort((a,b)=>a.aicc-b.aicc);
+ return {chance:chanceModels[0]||null,time:timeModels[0]||null,chanceModels,timeModels};
+}
+function fmtNumber(n,d=2){return Number.isFinite(n)?n.toFixed(d):'—';}
+function paintRegression(data,models){
+ const {chance,time}=models;
+ const chanceEl=el('regChance'),timeEl=el('regTime');
+ const note=el('regGuidance');
+ const min=rows[0],max=rows[rows.length-1];
+ if(time){
+  const b=time.coef;
+  const equation=time.kind==='linear'?`T(n) = ${fmtNumber(b[0])} + ${fmtNumber(b[1])}·(n−${fmtNumber(time.center,1)})/20`:time.kind==='quadratic'?`T(n) = ${fmtNumber(b[0])} + ${fmtNumber(b[1])}·x + ${fmtNumber(b[2],3)}·x², x=(n−${fmtNumber(time.center,1)})/20`:time.kind==='log'?`T(n) = ${fmtNumber(b[0])} + ${fmtNumber(b[1])}·ln(n)`:`T(n) = ${fmtNumber(Math.exp(b[0]))}·n^${fmtNumber(b[1],3)}`;
+  timeEl.replaceChildren();timeEl.innerHTML=`<strong>Mediane evenwichtstijd · ${time.name}</strong><div class="formula"></div><div>R² = ${fmtNumber(time.r2,3)} · RMSE = ${fmtNumber(time.rmse)} s</div><div class="regression-note">Beste AICc van: ${models.timeModels.map(m=>m.name+' ('+fmtNumber(m.aicc,1)+')').join(', ')}</div>`;
+  timeEl.querySelector('.formula').textContent=equation;
+ }else timeEl.textContent='Mediane tijd: minimaal vier groepsgroottes met succesvolle runs nodig.';
+ if(chance){
+  const b=chance.beta;
+  const eq=`logit(p) = ${fmtNumber(b[0],3)} + ${fmtNumber(b[1],3)}·x`+(chance.degree===2?` + ${fmtNumber(b[2],3)}·x²`:'')+`, x=(n−${fmtNumber(chance.center,1)})/20`;
+  chanceEl.replaceChildren();chanceEl.innerHTML=`<strong>Slaagkans · ${chance.name}</strong><div class="formula"></div><div>Fit op aantallen succes/mislukking · AICc = ${fmtNumber(chance.aicc,1)}</div><div class="regression-note">Modellen: ${models.chanceModels.map(m=>m.name+' ('+fmtNumber(m.aicc,1)+')').join(', ')}</div>`;
+  chanceEl.querySelector('.formula').textContent=eq;
+ }else chanceEl.textContent='Slaagkans: minimaal drie verschillende groepsgroottes met resultaten nodig.';
+ const target=Math.max(1,Math.min(99,+el('sweepTarget').value||80))/100;
+ let firstN=null;
+ if(chance){for(let n=min;n<=max;n+=.1){if(chance.predict(n)>=target){firstN=n;}else if(firstN!==null)break;}}
+ const passing=[];
+ if(chance){for(let n=min;n<=max;n+=.25){if(chance.predict(n)>=target)passing.push(n);}}
+ const upper=passing.length?Math.max(...passing):null;
+ const descending=el('sweepDescending').checked;
+ note.textContent=chance?`Bij afnemende groepsgrootte (${max} → ${min}) voorspelt het model een slaagkans van ${fmtNumber(chance.predict(max)*100,1)}% → ${fmtNumber(chance.predict(min)*100,1)}%. ${upper===null?'De gekozen '+Math.round(target*100)+'%-drempel wordt niet gehaald binnen het meetbereik.':'Tot ongeveer '+fmtNumber(upper,1)+' personen ligt de voorspelde slaagkans op minstens '+Math.round(target*100)+'% (voor zover het model monotoon is).'} ${descending?'De grafieken lopen nu van groot naar klein.':'Schakel de omgekeerde x-as in om de afname van groepsgrootte van links naar rechts te lezen.'} Dit is een vergelijking van onafhankelijke starts, niet het verwijderen van personen uit één lopend experiment.`:'Voer eerst een parameteronderzoek uit om de samenhang met dalende groepsgrootte te schatten.';
+ const tbody=el('regRows');tbody.replaceChildren();
+ for(const d of [...data].reverse()){const tr=document.createElement('tr');const cells=[d.n,d.done?fmtNumber(d.rate,1)+'%':'—',chance?fmtNumber(100*chance.predict(d.n),1)+'%':'—',fmtNumber(d.median,1)+' s',time?fmtNumber(time.predict(d.n),1)+' s':'—',d.done];
+  for(const v of cells){const td=document.createElement('td');td.textContent=v;tr.appendChild(td);}tbody.appendChild(tr);
+ }
+}
+function drawLine(id,data,key,percent=false){
+ const canvas=el(id),c=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+ const left=64,right=W-25,top=22,bottom=H-44,h=bottom-top,w=right-left;
+ c.fillStyle='#0a1425';c.fillRect(0,0,W,H);
+ c.font='13px system-ui';c.textAlign='center';c.textBaseline='middle';
+ const good=data.filter(d=>Number.isFinite(d[key]));
+ let max=percent?100:Math.max(1,...good.map(d=>d[key]));max=percent?100:Math.ceil(max/5)*5;
+ c.strokeStyle='#30465f';c.lineWidth=1;
+ for(let i=0;i<=4;i++){
+  const y=bottom-i/4*h;c.beginPath();c.moveTo(left,y);c.lineTo(right,y);c.stroke();
+  c.textAlign='right';c.fillStyle='#afc0d5';c.fillText((max*i/4).toFixed(percent?0:1),left-9,y);
+ }
+ if(!rows.length){c.textAlign='center';c.fillText('Nog geen gegevens',W/2,H/2);return;}
+ const xmin=rows[0],xmax=rows[rows.length-1];
+ const descending=el('sweepDescending').checked;
+ const x=n=>left+(xmax===xmin?.5:(descending?(xmax-n)/(xmax-xmin):(n-xmin)/(xmax-xmin)))*w;
+ const y=v=>bottom-v/max*h;
+ for(let i=0;i<rows.length;i++){
+  if(i%Math.max(1,Math.ceil(rows.length/12))===0||i===rows.length-1){c.textAlign='center';c.fillStyle='#afc0d5';c.fillText(String(rows[i]),x(rows[i]),bottom+19);}
+ }
+ c.strokeStyle='#65bbd7';c.lineWidth=2.5;c.beginPath();let active=false;
+ for(const d of data){if(!Number.isFinite(d[key])){active=false;continue;}if(!active)c.moveTo(x(d.n),y(d[key]));else c.lineTo(x(d.n),y(d[key]));active=true;}c.stroke();
+ const model=currentRegression&&(key==='rate'?currentRegression.chance:currentRegression.time);
+ if(model){
+  c.save();c.strokeStyle='#ffd28d';c.lineWidth=2;c.setLineDash([7,5]);c.beginPath();
+  for(let i=0;i<=120;i++){const n=xmin+(xmax-xmin)*i/120;const v=key==='rate'?model.predict(n)*100:model.predict(n);
+   if(!Number.isFinite(v)||v<0)continue;
+   if(i===0)c.moveTo(x(n),y(v));else c.lineTo(x(n),y(v));}
+  c.stroke();c.restore();
+  c.fillStyle='#ffd28d';c.textAlign='left';c.fillText('– – regressie',left+8,top+10);
+ }
+ for(const d of good){c.fillStyle='#79dfcb';c.beginPath();c.arc(x(d.n),y(d[key]),3.5,0,Math.PI*2);c.fill();}
+ if(!good.length){c.fillStyle='#afc0d5';c.textAlign='center';c.fillText('Geen geslaagde evenwichten gemeten',W/2,H/2);}
+}
+function paint(){
+ const a=aggregate();
+ el('sweepProgress').max=Math.max(1,total);el('sweepProgress').value=finished;
+ el('sweepStatus').textContent=finished+' / '+total+' herhalingen gereed'+(errors?' · '+errors+' fouten':'')+(running?' · dynamische wachtrij actief…':'');
+ const body=el('sweepRows');body.replaceChildren();const frag=document.createDocumentFragment();
+ for(const d of a){const tr=document.createElement('tr');
+  [d.n,d.done,d.success,d.stalled,d.limited,format(d.rate),format(d.median),format(d.average),Number.isFinite(d.p25)?format(d.p25)+' – '+format(d.p75):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td);});frag.appendChild(tr);
+ }body.appendChild(frag);
+ currentRegression=analyseRegression(a);
+ drawLine('sweepMedianChart',a,'median');drawLine('sweepSuccessChart',a,'rate',true);
+ paintRegression(a,currentRegression);
+ el('sweepExport').disabled=!results.some(Boolean);
+}
+function clean(){for(const w of workers){w.terminate();URL.revokeObjectURL(w.workerUrl);}workers.length=0;}
+function end(cancelled=false){if(!running)return;running=false;stopped=cancelled;clean();el('sweepStart').disabled=false;el('sweepStop').disabled=true;paint();el('sweepStatus').textContent=(cancelled?'Onderzoek gestopt':'Onderzoek afgerond')+' · '+finished+'/'+total+' herhalingen · '+((performance.now()-started)/1000).toFixed(1)+' s rekentijd'+(errors?' · '+errors+' fouten':'');}
+function start(){
+ if(running)return;
+ let from=Math.max(3,Math.min(100,Math.floor(+el('sweepFrom').value||5))),to=Math.max(3,Math.min(100,Math.floor(+el('sweepTo').value||100)));
+ if(from>to){el('sweepStatus').textContent='De beginwaarde moet kleiner dan of gelijk aan de eindwaarde zijn.';return;}
+ const step=Math.max(1,Math.min(97,Math.floor(+el('sweepStep').value||5))),reps=Math.max(1,Math.min(1000,Math.floor(+el('sweepReps').value||100)));
+ ['sweepFrom','sweepTo','sweepStep','sweepReps'].forEach((id,i)=>el(id).value=[from,to,step,reps][i]);
+ rows=[];for(let n=from;n<=to;n+=step)rows.push(n);
+ total=rows.length*reps;
+ if(total>20000){el('sweepStatus').textContent='Maximaal 20.000 herhalingen per parameteronderzoek; verhoog de stapgrootte of verlaag het aantal herhalingen.';return;}
+ baseConfig=getSettings();baseSeed=Math.max(0,Math.floor(+el('sciSeed').value||0))>>>0;
+ const jobs=[];let index=0;
+ for(let rep=0;rep<reps;rep++){for(const n of rows){
+  jobs.push({index:index++,count:n,rep,seed:(baseSeed+Math.imul(rep,2654435761))>>>0,config:{...baseConfig,count:n}});
+ }}
+ results=Array(total).fill(null);finished=0;errors=0;running=true;started=performance.now();
+ el('sweepStart').disabled=true;el('sweepStop').disabled=false;paint();
+ const workerCount=Math.min(total,Math.max(1,Math.floor(+el('sciWorkers').value||4)));
+ const source=el('scientificWorker').textContent;
+ let nextJob=0;
+ const dispatch=w=>{
+  if(!running)return;
+  if(nextJob<jobs.length)w.postMessage({type:'job',config:baseConfig,job:jobs[nextJob++]});
+  else if(finished===total)end(false);
+ };
+ try{
+  for(let i=0;i<workerCount;i++){
+   const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));const w=new Worker(url);w.workerUrl=url;workers.push(w);
+   w.onmessage=({data})=>{
+    if(!running)return;
+    if(data.type==='result'){
+     const job=jobs[data.index];if(!results[data.index]){results[data.index]={...data.result,count:job.count,rep:job.rep};finished++;if(finished%Math.max(1,Math.floor(total/200))===0||finished===total)paint();}
+    }else if(data.type==='error'){errors++;finished++;paint();}
+    dispatch(w);
+   };
+   w.onerror=e=>{if(!running)return;end(true);el('sweepStatus').textContent='Worker-fout: '+(e.message||'onbekend')};
+  }
+  for(const w of workers)dispatch(w);
+ }catch(error){end(true);el('sweepStatus').textContent='Workers niet beschikbaar: '+error.message;}
+}
+el('sweepDescending').addEventListener('change',paint);
+el('sweepTarget').addEventListener('input',paint);
+el('sweepStart').addEventListener('click',start);
+el('sweepStop').addEventListener('click',()=>end(true));
+el('sweepExport').addEventListener('click',()=>{
+ const header=['personen','herhaling','seed','uitkomst','tijd_s','binnen_marge','totaal_personen','max_afwijking_px','max_snelheid_px_s','selectie_aanvullingen','initiele_overlap','stappen','instellingen_json'];
+ const all=results.filter(Boolean).map(r=>[r.count,r.rep+1,r.seed,r.outcome,r.time,r.satisfied,r.participantCount,r.maxExcess,r.maxSpeed,r.fallbacks,r.initialOverlap,r.steps,JSON.stringify({...baseConfig,count:r.count})]);
+ const esc=v=>'"'+String(v??'').replaceAll('"','""')+'"';
+ const csv='\uFEFF'+[header,...all].map(line=>line.map(esc).join(';')).join('\r\n');
+ const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ const a=document.createElement('a');a.href=url;a.download='equidistantie_parameteronderzoek_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+});
+paint();
+})();
+</script>
+</body></html>
